@@ -5,14 +5,16 @@ import { useDispatch, useSelector } from "react-redux";
 import HomeCards from "../components/HomeCards/HomeCards";
 import FilterCards from "../components/FilterCards/FilterCards";
 import { Button, Menu, Text } from "react-native-paper";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function Home() {
   const dispatch = useDispatch();
+  const focus = useIsFocused();
   const photos = useSelector((state) => state.photos.filterPhotosData);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     dispatch(getAllPhotosData());
-  }, [dispatch]);
+  }, [dispatch, focus]);
 
   return (
     <View style={{ height: "100%", width: "100%" }}>
@@ -29,7 +31,9 @@ export default function Home() {
             }}
           >
             <Text>{photos.length} Results</Text>
-            <Button onPress={() => setVisible(true)}>Filter/Order</Button>
+            <Button mode="contained" onPress={() => setVisible(true)}>
+              Filter/Order
+            </Button>
           </View>
         }
       >
@@ -44,9 +48,9 @@ export default function Home() {
           alignContent: "center",
         }}
       >
-        {photos.map((x) => (
-          <HomeCards x={x} key={x.id} />
-        ))}
+        {photos.length > 0
+          ? photos.map((x) => <HomeCards x={x} key={x._id} />)
+          : null}
       </ScrollView>
     </View>
   );

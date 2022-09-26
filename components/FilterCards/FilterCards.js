@@ -67,17 +67,17 @@ export default function FilterCards() {
       <TextInput
         placeholder="Min Price"
         onChangeText={(e) => handlePriceMin(e)}
-        value={filter.priceRange.min ? filter.priceRange.min : null}
+        value={filter.priceRange.min ? filter.priceRange.min : ""}
       ></TextInput>
       <TextInput
         placeholder="Max Price"
         onChangeText={(e) => handlePriceMax(e)}
-        value={filter.priceRange.max ? filter.priceRange.max : null}
+        value={filter.priceRange.max ? filter.priceRange.max : ""}
       ></TextInput>
       <Searchbar
         placeholder="Search..."
         onChangeText={(e) => handleTitle(e)}
-        value={filter.title ? filter.title : null}
+        value={filter.title ? filter.title : ""}
       />
 
       <Divider />
@@ -86,7 +86,7 @@ export default function FilterCards() {
         mode="contained"
         onPress={() =>
           setFilter({
-            priceRange: { max: null, min: null, pay: null },
+            priceRange: { max: null, min: null, pay: "" },
             title: null,
           })
         }
