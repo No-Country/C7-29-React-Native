@@ -75,30 +75,26 @@ export default function Publish() {
 
   async function handleTakePhoto() {
     const checkPermisions = await ImagePicker.getCameraPermissionsAsync();
+    await requestPermissionCamera();
     if (checkPermisions.granted) {
-      const photo = await ImagePicker.launchCameraAsync();
       setFormData({ ...formData, image: { loading: true, value: null } });
+      const photo = await ImagePicker.launchCameraAsync();
       const response = uploadPhotoToCloudinary(photo.uri);
       const d = await response();
       setFormData({ ...formData, image: { loading: false, value: d } });
-    } else {
-      await requestPermissionCamera();
-      ImagePicker.launchCameraAsync();
     }
   }
 
   async function handleTakeFile() {
     const checkPermisions =
       await ImagePicker.requestMediaLibraryPermissionsAsync(false);
+    await requestPermissionFiles();
     if (checkPermisions.granted) {
       const photo = await ImagePicker.launchImageLibraryAsync();
       setFormData({ ...formData, image: { loading: true, value: null } });
       const response = uploadPhotoToCloudinary(photo.uri);
       const d = await response();
       setFormData({ ...formData, image: { loading: false, value: d } });
-    } else {
-      await requestPermissionFiles();
-      ImagePicker.launchImageLibraryAsync();
     }
   }
 
