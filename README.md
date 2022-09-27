@@ -53,19 +53,27 @@ $ npm start
 ```
 
 ## Equipo
-- [Christian Sotelo]() : Diseño ux/ui
-- [Melvin Taveras]() : Diseño ux/ui
 
-- [Franco Rodriguez](https://www.linkedin.com/in/juan-franco-rodriguez/) : Front End
-- [Isaac Urdaneta]() : Front End
-- [rodrigo zucchini]() : Front End
-- [Mateo Marquez]() : Front End
+Diseño ux/ui
+- [Christian Sotelo]()
+- [Melvin Taveras]() 
 
-- [Emanuel Juri](https://www.linkedin.com/in/emanuel-juri/) : Back End 
-- [Joe Vega]() : Back End 
-- [Angel Villalba](https://www.linkedin.com/in/angelvillalba/) : Back End 
 
-- [Franco Rodriguez](https://www.linkedin.com/in/juan-franco-rodriguez/) : Front End-React-Native con ExpoGo
+Front End-React-Native con ExpoGo
+- [Franco Rodriguez](https://www.linkedin.com/in/juan-franco-rodriguez/)
+
+Front-End Web
+- [Franco Rodriguez](https://www.linkedin.com/in/juan-franco-rodriguez/)
+- [Isaac Urdaneta]()
+- [rodrigo zucchini]()
+- [Mateo Marquez]()
+
+Back-End 
+- [Emanuel Juri](https://www.linkedin.com/in/emanuel-juri/) 
+- [Joe Vega]()
+- [Angel Villalba](https://www.linkedin.com/in/angelvillalba/)
+
+
 
 
 
