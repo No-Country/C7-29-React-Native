@@ -1,6 +1,8 @@
 import { Card, Button } from "react-native-paper";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deletePhoto } from "../../redux/actions/photosActions";
+import { addItemToCart, cleanItem } from "../../redux/slices/cartSlice";
+import { addSnack } from "../../redux/slices/snackBarSlice";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
 import * as Notifications from "expo-notifications";
@@ -8,9 +10,14 @@ import * as Device from "expo-device";
 import * as ImagePicker from "expo-image-picker";
 
 import { useEffect, useRef, useState } from "react";
+import { useLanguage } from "../../hooks/useLanguage";
 
 export default function Home({ x }) {
+  const langstring = useSelector((state) => state.lang.lang);
+  const { home } = useLanguage(langstring);
+
   const dispatch = useDispatch();
+  const cart = useSelector((state) => state.cart.cartItems);
 
   //Notificaciones
   Notifications.setNotificationHandler({
@@ -51,8 +58,14 @@ export default function Home({ x }) {
   async function schedulePushNotification() {
     await Notifications.scheduleNotificationAsync({
       content: {
-        title: "Image Correctly Downloaded",
-        body: `You cant find ${x.id}.jpg in Pictures/Downloads file`,
+        title: home.homeCards.notificacion.title,
+        body:
+          home.homeCards.notificacion.body[0] +
+          " " +
+          x.title +
+          x._id[0] +
+          x._id[x._id.length - 1] +
+          home.homeCards.notificacion.body[1],
         data: {
           data: "Image its an id.jpg in the downloads file of your device",
         },
@@ -98,6 +111,30 @@ export default function Home({ x }) {
     }
   }
 
+  function handleAddCart() {
+    dispatch(addItemToCart(x));
+    dispatch(
+      addSnack({
+        visibility: true,
+        action: x._id,
+        message: x.title + " " + home.homeCards.handleAddCart,
+        inCart: true,
+      })
+    );
+  }
+
+  function handleRemoveCart() {
+    dispatch(cleanItem(x._id));
+    dispatch(
+      addSnack({
+        visibility: true,
+        action: x,
+        message: x.title + " " + home.homeCards.handleRemoveCart,
+        inCart: false,
+      })
+    );
+  }
+
   return (
     <Card
       elevation={5}
@@ -109,14 +146,46 @@ export default function Home({ x }) {
         alignItems: "center",
       }}
     >
-      <Card.Title title={x.title} subtitle={x.pay ? x.price + "$" : "Free"} />
+      <Card.Title
+        title={x.title}
+        subtitle={x.pay ? x.price + "$" : home.homeCards.free}
+      />
 
       <Card.Cover source={{ uri: x.url }} style={{ width: 200, height: 200 }} />
-      <Button mode="contained" onPress={() => dispatch(deletePhoto(x._id))}>
-        Delete
-      </Button>
-      <Button mode="contained" onPress={async () => await downloadPhoto(x.url)}>
-        Download
+
+      {x.pay ? (
+        cart.filter((p) => p._id === x._id).length > 0 ? (
+          <Button
+            mode="contained"
+            icon="cart-arrow-up"
+            onPress={() => handleRemoveCart()}
+          >
+            {home.homeCards.btnRemoveCart}
+          </Button>
+        ) : (
+          <Button
+            mode="contained"
+            icon="cart-arrow-down"
+            onPress={() => handleAddCart()}
+          >
+            {home.homeCards.btnAddCart}
+          </Button>
+        )
+      ) : (
+        <Button
+          mode="contained"
+          onPress={async () => await downloadPhoto(x.url)}
+          icon="download"
+        >
+          {home.homeCards.download}
+        </Button>
+      )}
+      <Button
+        mode="contained"
+        icon="trash-can-outline"
+        onPress={() => dispatch(deletePhoto(x._id))}
+      >
+        {home.homeCards.delete}
       </Button>
     </Card>
   );
