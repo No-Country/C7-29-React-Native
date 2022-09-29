@@ -3,11 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDataForFiltering } from "../../redux/actions/photosActions";
 import { View } from "react-native";
 import { Button, TextInput, Searchbar, Divider } from "react-native-paper";
+import { useLanguage } from "../../hooks/useLanguage";
 
 export default function FilterCards() {
   const dispatch = useDispatch();
   const savedOptions = useSelector((state) => state.photos.filterOptions);
   const [filter, setFilter] = useState(savedOptions);
+  const langstring = useSelector((state) => state.lang.lang);
+  const { filterlang } = useLanguage(langstring);
 
   useEffect(() => {
     dispatch(getDataForFiltering(filter));
@@ -58,24 +61,24 @@ export default function FilterCards() {
     <View style={{ width: "100%" }}>
       <Button mode="contained" onPress={() => handlePricePay()}>
         {filter.priceRange.pay
-          ? "Pago"
+          ? filterlang.tipo[1]
           : filter.priceRange.pay === null
-          ? "Todo"
-          : "Gratis"}
+          ? filterlang.tipo[0]
+          : filterlang.tipo[2]}
       </Button>
 
       <TextInput
-        placeholder="Min Price"
+        placeholder={filterlang.min}
         onChangeText={(e) => handlePriceMin(e)}
         value={filter.priceRange.min ? filter.priceRange.min : ""}
       ></TextInput>
       <TextInput
-        placeholder="Max Price"
+        placeholder={filterlang.max}
         onChangeText={(e) => handlePriceMax(e)}
         value={filter.priceRange.max ? filter.priceRange.max : ""}
       ></TextInput>
       <Searchbar
-        placeholder="Search..."
+        placeholder={filterlang.search}
         onChangeText={(e) => handleTitle(e)}
         value={filter.title ? filter.title : ""}
       />
@@ -91,7 +94,7 @@ export default function FilterCards() {
           })
         }
       >
-        Reset Filter
+        {filterlang.reset}
       </Button>
     </View>
   );

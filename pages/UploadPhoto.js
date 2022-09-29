@@ -3,17 +3,23 @@ import {
   uploadPhotoForm,
   uploadPhotoToCloudinary,
 } from "../redux/actions/photosActions";
-import { Button, TextInput } from "react-native-paper";
+import { Button, TextInput, HelperText } from "react-native-paper";
 import { Image, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import { useLanguage } from "../hooks/useLanguage";
+import { useSelector } from "react-redux";
 
 export default function Publish() {
+  const langstring = useSelector((state) => state.lang.lang);
+  const { publication } = useLanguage(langstring);
+
   const [formData, setFormData] = useState({
     title: { value: null },
     description: { value: null },
     image: { value: null, loading: false },
     price: { paga: false, price: null },
     error: null,
+    uploading: false,
   });
 
   const [statusCamera, requestPermissionCamera] =
@@ -26,31 +32,33 @@ export default function Publish() {
       formData.title.value !== null &&
       formData.description.value &&
       formData.image.value &&
-      (formData.price.price || !formData.price.paga)
+      (formData.price.price || !formData.price.paga) &&
+      !formData.uploading
     ) {
       return (
         <Button mode="contained" onPress={() => handleSubmit()}>
-          Subir Publicacion
+          {publication.btn}
         </Button>
       );
     } else
       return (
         <Button mode="contained" disabled={true}>
-          Subir Publicacion
+          {publication.btn}
         </Button>
       );
   }
 
   async function handleSubmit() {
+    setFormData({ ...formData, uploading: true });
     const a = uploadPhotoForm(formData);
     const d = await a();
-    console.log(d);
     if (d.message === "Publicacion creada correctamente") {
       setFormData({
         title: { value: null },
         description: { value: null },
         image: { value: null, loading: false },
         price: { paga: false, price: null },
+        uploading: false,
       });
     } else {
       setFormData({
@@ -102,23 +110,27 @@ export default function Publish() {
     <View>
       <TextInput
         id="formulario_title"
-        placeholder="Title..."
+        placeholder={publication.title_placeholder}
         onChangeText={(e) => handleTitle(e)}
         value={formData.title.value || ""}
       ></TextInput>
       <TextInput
-        id="formulario_title"
-        placeholder="Descripcion..."
+        id="formulario_description"
+        placeholder={publication.descrip_placehodler}
         onChangeText={(e) => handleDescription(e)}
         value={formData.description.value || ""}
       ></TextInput>
 
       <View style={{ flexDirection: "row" }}>
-        <Button mode="contained" onPress={() => handleTakePhoto()}>
-          Take Photo
+        <Button
+          mode="contained"
+          icon="camera"
+          onPress={() => handleTakePhoto()}
+        >
+          {publication.take_photo}
         </Button>
-        <Button mode="contained" onPress={() => handleTakeFile()}>
-          Upload Photo
+        <Button mode="contained" icon="file" onPress={() => handleTakeFile()}>
+          {publication.upload_file}
         </Button>
       </View>
       <Image
@@ -141,17 +153,26 @@ export default function Publish() {
           })
         }
       >
-        {formData.price.paga ? "Paga" : "Gratis"}
+        {formData.price.paga ? publication.pay[0] : publication.pay[1]}
       </Button>
       {formData.price.paga ? (
-        <TextInput
-          placeholder="Price"
-          type="number"
-          onChangeText={(e) => handlePrice(e)}
-          value={formData.price.price || ""}
-        ></TextInput>
+        <>
+          <TextInput
+            placeholder={publication.price}
+            type="number"
+            onChangeText={(e) => handlePrice(e)}
+            value={formData.price.price || ""}
+          ></TextInput>
+          <HelperText
+            type="error"
+            visible={
+              isNaN(formData.price.price) || parseInt(formData.price.price) < 0
+            }
+          >
+            {publication.price_error}
+          </HelperText>
+        </>
       ) : null}
-
       {publishButton()}
     </View>
   );

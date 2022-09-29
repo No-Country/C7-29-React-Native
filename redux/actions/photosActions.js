@@ -1,9 +1,12 @@
 import { insertDataAllPhotos, setFilter } from "../slices/photosSlice";
 
 export const getAllPhotosData = () => async (dispatch) => {
-  return await fetch(`http://192.168.1.67:9000/api/publication`, {
-    method: "GET",
-  })
+  return await fetch(
+    `https://backend-no-country-c-7.onrender.com/api/publication`,
+    {
+      method: "GET",
+    }
+  )
     .then((response) => response.json())
     .then((d) => dispatch(insertDataAllPhotos(d)))
     .catch((e) => console.log(e));
@@ -14,7 +17,7 @@ export const getDataForFiltering = (filterData) => async (dispatch) => {
 };
 
 export const uploadPhotoForm = (data) => async () => {
-  return fetch(`http://192.168.1.67:9000/api/publication`, {
+  return fetch(`https://backend-no-country-c-7.onrender.com/api/publication`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -46,13 +49,19 @@ export const uploadPhotoToCloudinary = (e) => async () => {
 };
 
 export const deletePhoto = (id) => async (dispatch) => {
-  return await fetch(`http://192.168.1.67:9000/api/publication/${id}`, {
-    method: "DELETE",
-  })
+  return await fetch(
+    `https://backend-no-country-c-7.onrender.com/api/publication/${id}`,
+    {
+      method: "DELETE",
+    }
+  )
     .then(async (d) => {
-      return await fetch(`http://192.168.1.67:9000/api/publication`, {
-        method: "GET",
-      })
+      return await fetch(
+        `https://backend-no-country-c-7.onrender.com/api/publication`,
+        {
+          method: "GET",
+        }
+      )
         .then((responsea) => responsea.json())
         .then((f) => dispatch(insertDataAllPhotos(f)))
         .catch((e) => console.log(e));
