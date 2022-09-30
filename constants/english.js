@@ -17,6 +17,7 @@ const english = {
           title: "Image was correctly downloaded",
           body: ["You can find ", ".jpg in the folder Pictures/Downloads"],
         },
+        details: "Details",
         handleAddCart: "Added to the Cart!",
         handleRemoveCart: "Removed from the Cart.",
         free: "Free",
@@ -46,6 +47,8 @@ const english = {
       upload: "Upload Photo",
       profile: "Profile",
       cart: "Shopping cart",
+      language: "English/Español",
+      lightmode: "Mode Night/Day",
     },
     filterlang: {
       min: "Min. Price",

@@ -4,7 +4,6 @@ import TrueApp from "./TrueApp";
 import store from "./redux/store/store";
 import { Provider } from "react-redux";
 
-//React Native Paper
 import { Provider as PaperProvider } from "react-native-paper";
 
 export default function App() {

@@ -27,6 +27,7 @@ export default function FilterCards() {
 
   return (
     <View>
+      <FAB icon="trash-can" onPress={() => setVisible(true)} />
       <ScrollView
         style={{
           height: "95%",
@@ -40,7 +41,6 @@ export default function FilterCards() {
           <Text>{cartlang.empty}</Text>
         )}
       </ScrollView>
-      {console.log(snack)}
       <Snackbar
         visible={snack.visibility}
         onDismiss={() => {
@@ -58,11 +58,6 @@ export default function FilterCards() {
       >
         {snack.message}
       </Snackbar>
-      <FAB
-        icon="trash-can"
-        style={styles.fab}
-        onPress={() => setVisible(true)}
-      />
       <Portal>
         <Dialog visible={visible} onDismiss={hideDialog}>
           <Dialog.Icon icon="alert" />

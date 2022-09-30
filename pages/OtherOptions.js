@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { Switch, Button } from "react-native-paper";
+import { Switch, Button, Text } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { switchLang } from "../redux/slices/langSLice";
 import { useLanguage } from "../hooks/useLanguage";
@@ -34,11 +34,13 @@ export default function OtherOptions({ navigation }) {
       <Button onPress={() => navigation.navigate(tabScreen.cart)} icon="cart">
         {oherOptions.cart}
       </Button>
-
-      <Switch
-        value={langstring === "EN"}
-        onValueChange={() => dispatch(switchLang())}
-      />
+      <View style={{ flexDirection: "row", justifyContent: "center" }}>
+        <Text style={{ alignSelf: "center" }}>{oherOptions.language}</Text>
+        <Switch
+          value={langstring === "EN"}
+          onValueChange={() => dispatch(switchLang())}
+        />
+      </View>
     </View>
   );
 }

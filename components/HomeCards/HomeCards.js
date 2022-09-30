@@ -1,4 +1,4 @@
-import { Card, Button } from "react-native-paper";
+import { Card, Button, Portal, Modal, Text } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { deletePhoto } from "../../redux/actions/photosActions";
 import { addItemToCart, cleanItem } from "../../redux/slices/cartSlice";
@@ -8,6 +8,7 @@ import * as MediaLibrary from "expo-media-library";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import * as ImagePicker from "expo-image-picker";
+import DetallesCards from "../../components/DetallesCards/DetallesCards";
 
 import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "../../hooks/useLanguage";
@@ -15,6 +16,15 @@ import { useLanguage } from "../../hooks/useLanguage";
 export default function Home({ x }) {
   const langstring = useSelector((state) => state.lang.lang);
   const { home } = useLanguage(langstring);
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const containerStyle = {
+    backgroundColor: "white",
+    padding: 20,
+    width: "90%",
+    height: "80%",
+    alignSelf: "center",
+  };
 
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cartItems);
@@ -145,6 +155,7 @@ export default function Home({ x }) {
         alignContent: "center",
         alignItems: "center",
       }}
+      onPress={() => setModalVisible(true)}
     >
       <Card.Title
         title={x.title}
@@ -187,6 +198,16 @@ export default function Home({ x }) {
       >
         {home.homeCards.delete}
       </Button>
+
+      <Portal>
+        <Modal
+          visible={modalVisible}
+          onDismiss={() => setModalVisible(false)}
+          contentContainerStyle={containerStyle}
+        >
+          <DetallesCards x={x} />
+        </Modal>
+      </Portal>
     </Card>
   );
 

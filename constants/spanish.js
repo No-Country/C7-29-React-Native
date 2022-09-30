@@ -20,6 +20,7 @@ const spanish = {
             ".jpg en la carpeta de Imagenes Descargadas de tu dispositivo",
           ],
         },
+        details: "Detalles",
         handleAddCart: "Añadido al carro!",
         handleRemoveCart: "Removido del carro.",
         free: "Gratis",
@@ -49,6 +50,8 @@ const spanish = {
       upload: "Subir Foto",
       profile: "Perfil",
       cart: "Carro de Compras",
+      language: "English/Español",
+      lightmode: "Modo Dia/Noche",
     },
     filterlang: {
       min: "Min. Precio",

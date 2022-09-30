@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useLanguage } from "../../hooks/useLanguage";
-import { Card, Button } from "react-native-paper";
+import { Card, Button, Modal } from "react-native-paper";
 import { cleanItem } from "../../redux/slices/cartSlice";
 import { addSnack } from "../../redux/slices/snackBarSlice";
 import { StyleSheet } from "react-native";

@@ -107,7 +107,14 @@ export default function Publish() {
   }
 
   return (
-    <View>
+    <View
+      style={{
+        justifyContent: "center",
+        alignContent: "center",
+        alignContent: "center",
+        height: "100%",
+      }}
+    >
       <TextInput
         id="formulario_title"
         placeholder={publication.title_placeholder}
@@ -142,7 +149,7 @@ export default function Publish() {
             ? formData.image.value
             : "https://us.123rf.com/450wm/pavelstasevich/pavelstasevich1811/pavelstasevich181101028/112815904-no-image-available-icon-flat-vector-illustration.jpg?ver=6",
         }}
-        style={{ width: 200, height: 200 }}
+        style={{ width: 200, height: 200, alignSelf: "center" }}
       ></Image>
       <Button
         mode="contained"
