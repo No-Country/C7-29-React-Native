@@ -20,9 +20,6 @@ import { useDispatch, useSelector } from "react-redux";
 //Storage local
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-//Gestures
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-
 export default function TrueApp() {
   const langstring = useSelector((state) => state.lang.lang);
   const { tabScreen } = useLanguage(langstring);

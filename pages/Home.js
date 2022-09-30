@@ -13,11 +13,7 @@ import { useLanguage } from "../hooks/useLanguage";
 import { FAB, Badge } from "react-native-paper";
 
 //gesture test
-import {
-  GestureDetector,
-  Gesture,
-  GestureHandlerRootView,
-} from "react-native-gesture-handler";
+import { GestureDetector, Gesture } from "react-native-gesture-handler";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -98,84 +94,83 @@ export default function Home({ navigation }) {
     });
 
   return (
-    <View style={{ height: "100%", width: "100%", backgroundColor: "white" }}>
-      <GestureHandlerRootView>
-        <Menu
-          visible={visible}
-          onDismiss={() => setVisible(false)}
-          anchor={
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-around",
-                alignItems: "center",
-                width: "100%",
-              }}
-            >
-              <Text>
-                {photos.length} {home.results}
-              </Text>
-              <Button mode="contained" onPress={() => setVisible(true)}>
-                {home.filteroder}
-              </Button>
-            </View>
-          }
-        >
-          <Menu.Item onPress={() => {}} title={home.filterorder_btn} />
-          <FilterCards />
-        </Menu>
+    <View style={{ height: "100%", width: "100%" }}>
+      <Menu
+        visible={visible}
+        onDismiss={() => setVisible(false)}
+        anchor={
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-around",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <Text>
+              {photos.length} {home.results}
+            </Text>
+            <Button mode="contained" onPress={() => setVisible(true)}>
+              {home.filteroder}
+            </Button>
+          </View>
+        }
+      >
+        <Menu.Item onPress={() => {}} title={home.filterorder_btn} />
+        <FilterCards />
+      </Menu>
 
-        <ScrollView
-          style={{
-            height: "95%",
-            width: "100%",
-            alignContent: "center",
-          }}
-          refreshControl={
-            <RefreshControl
-              refreshing={loading}
-              onRefresh={() => handleRefresh()}
-            />
+      <ScrollView
+        style={{
+          height: "95%",
+          width: "100%",
+          alignContent: "center",
+        }}
+        refreshControl={
+          <RefreshControl
+            refreshing={loading}
+            onRefresh={() => handleRefresh()}
+          />
+        }
+        onScroll={({ nativeEvent }) => {
+          if (isCloseToBottom(nativeEvent)) {
+            handleRefresh();
           }
-          onScroll={({ nativeEvent }) => {
-            if (isCloseToBottom(nativeEvent)) {
-              handleRefresh();
-            }
-          }}
-        >
-          {photos.length > 0
-            ? photos.map((x) => <HomeCards x={x} key={x._id} />)
-            : null}
-          <ActivityIndicator animating={loading || refresh} />
-        </ScrollView>
-        <GestureDetector gesture={gesture}>
-          <Animated.View style={[styles.fab, animatedStyles]}>
-            <FAB
-              icon="cart"
-              onPress={() => navigation.navigate(tabScreen.cart)}
-            />
-            <Badge style={{ position: "absolute" }}>{cart.length}</Badge>
-          </Animated.View>
-        </GestureDetector>
+        }}
+      >
+        {photos.length > 0
+          ? photos.map((x) => <HomeCards x={x} key={x._id} />)
+          : null}
+        <ActivityIndicator animating={loading || refresh} />
+      </ScrollView>
 
-        <Snackbar
-          visible={snack.visibility}
-          onDismiss={() => {
-            dispatch(cleanSnack());
-          }}
-          action={{
-            label: home.undo,
-            onPress: () => {
-              snack.inCart
-                ? dispatch(cleanItem(snack.action))
-                : dispatch(addItemToCart(snack.action));
-            },
-          }}
-          duration={3000}
-        >
-          {snack.message}
-        </Snackbar>
-      </GestureHandlerRootView>
+      <GestureDetector gesture={gesture}>
+        <Animated.View style={[styles.fab, animatedStyles]}>
+          <FAB
+            icon="cart"
+            onPress={() => navigation.navigate(tabScreen.cart)}
+          />
+          <Badge style={{ position: "absolute" }}>{cart.length}</Badge>
+        </Animated.View>
+      </GestureDetector>
+
+      <Snackbar
+        visible={snack.visibility}
+        onDismiss={() => {
+          dispatch(cleanSnack());
+        }}
+        action={{
+          label: home.undo,
+          onPress: () => {
+            snack.inCart
+              ? dispatch(cleanItem(snack.action))
+              : dispatch(addItemToCart(snack.action));
+          },
+        }}
+        duration={3000}
+      >
+        {snack.message}
+      </Snackbar>
     </View>
   );
 }

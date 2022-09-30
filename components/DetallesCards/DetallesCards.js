@@ -1,10 +1,20 @@
 import { Text } from "react-native-paper";
-import { View } from "react-native";
+import { View, Image } from "react-native";
 
 export default function DetallesCards({ x }) {
-  console.log(x);
   return (
-    <View style={{ width: "100%", height: "100%" }}>
+    <View
+      style={{
+        width: "100%",
+        height: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Image
+        source={{ uri: x.url }}
+        style={{ width: "100%", height: "50%" }}
+      ></Image>
       <Text>{x.title}</Text>
       <Text>{x.description}</Text>
       <Text>{x.photographer.name}</Text>

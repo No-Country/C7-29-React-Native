@@ -1,4 +1,4 @@
-import { Card, Button, Portal, Modal, Text } from "react-native-paper";
+import { Card, Button } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { deletePhoto } from "../../redux/actions/photosActions";
 import { addItemToCart, cleanItem } from "../../redux/slices/cartSlice";
@@ -8,7 +8,7 @@ import * as MediaLibrary from "expo-media-library";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import * as ImagePicker from "expo-image-picker";
-import DetallesCards from "../../components/DetallesCards/DetallesCards";
+import RotateModal from "../../components/RotateModal/RotateModal";
 
 import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "../../hooks/useLanguage";
@@ -199,15 +199,12 @@ export default function Home({ x }) {
         {home.homeCards.delete}
       </Button>
 
-      <Portal>
-        <Modal
-          visible={modalVisible}
-          onDismiss={() => setModalVisible(false)}
-          contentContainerStyle={containerStyle}
-        >
-          <DetallesCards x={x} />
-        </Modal>
-      </Portal>
+      <RotateModal
+        modalVisible={modalVisible}
+        det={x}
+        setModalVisible={setModalVisible}
+        containerStyle={containerStyle}
+      />
     </Card>
   );
 
