@@ -4,6 +4,7 @@ import cart from "../slices/cartSlice";
 import user from "../slices/userSlice";
 import snackBar from "../slices/snackBarSlice";
 import lang from "../slices/langSLice";
+import profile from "../slices/profileSlice";
 
 export default configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export default configureStore({
     cart,
     snackBar,
     lang,
+    profile,
   },
 });

@@ -1,5 +1,6 @@
 {
   "expo": {
+    "title": "Dark-Room",
     "scheme": "nativeversion",
     "plugins": [
       [

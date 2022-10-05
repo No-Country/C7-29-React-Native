@@ -1,66 +1,71 @@
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
+  withSpring,
+  useAnimatedGestureHandler,
+  runOnJS,
 } from "react-native-reanimated";
-import {
-  GestureDetector,
-  Gesture,
-  GestureHandlerRootView,
-} from "react-native-gesture-handler";
+import { PanGestureHandler } from "react-native-gesture-handler";
 import { StyleSheet } from "react-native";
 import DetallesCards from "../DetallesCards/DetallesCards";
 import { Modal, Portal } from "react-native-paper";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
-export default function RotateModal({
-  modalVisible,
-  det,
-  setModalVisible,
-  containerStyle,
-}) {
-  const isPressed = useSharedValue(false);
-  const offset = useSharedValue({ x: 0 });
+export default function RotateModal({ modalVisible, setModalVisible, indice }) {
+  const x = useSharedValue(0);
+  const photos = useSelector((state) => state.photos.filterPhotosData);
+  const [detailsOf, setDetailsOf] = useState(indice);
+  var test = photos.length - 1;
+
+  useEffect(() => {
+    setDetailsOf(indice);
+  }, [indice, modalVisible]);
+
+  const gesture = useAnimatedGestureHandler({
+    onStart: (_, ctx) => {},
+    onActive: (event, ctx) => {
+      x.value = event.translationX;
+    },
+    onEnd: (_) => {
+      x.value = withSpring(0);
+      if (x.value < -100) {
+        if (detailsOf > 0) {
+          runOnJS(setDetailsOf)(detailsOf - 1);
+        } else {
+          runOnJS(setDetailsOf)(test);
+        }
+      } else if (x.value > 100) {
+        runOnJS(setDetailsOf)(detailsOf < test ? detailsOf + 1 : 0);
+      }
+    },
+  });
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
       transform: [
-        { translateX: offset.value.x },
+        { translateX: x.value },
         {
           rotate:
-            offset.value.x < 40 && offset.value.x >= 0
-              ? offset.value.x + "deg"
-              : offset.value.x <= 0
-              ? offset.value.x > -40
-                ? offset.value.x + "deg"
+            x.value < 40 && x.value >= 0
+              ? x.value + "deg"
+              : x.value <= 0
+              ? x.value > -40
+                ? x.value + "deg"
                 : -40 + "deg"
               : 40 + "deg",
         },
       ],
-      //backgroundColor: isPressed.value ? "yellow" : "blue",
     };
   });
 
-  const gesture = Gesture.Pan()
-    .onBegin(() => {
-      "worklet";
-      isPressed.value = true;
-    })
-    .onChange((e) => {
-      "worklet";
-      offset.value = {
-        x: e.changeX + offset.value.x,
-      };
-    })
-    .onFinalize(() => {
-      "worklet";
-      isPressed.value = false;
-      if (offset.value.x < -100) {
-      } else if (offset.value.x > 100) {
-      } else {
-        offset.value = {
-          x: 0,
-        };
-      }
-    });
+  const containerStyle = {
+    backgroundColor: "transparent",
+    padding: 20,
+    width: "90%",
+    height: "80%",
+    alignSelf: "center",
+  };
 
   return (
     <Portal>
@@ -70,16 +75,11 @@ export default function RotateModal({
         contentContainerStyle={containerStyle}
         style={{ height: "100%", width: "100%" }}
       >
-        <GestureHandlerRootView style={{ height: "100%", width: "100%" }}>
-          <GestureDetector
-            style={{ height: "100%", width: "100%" }}
-            gesture={gesture}
-          >
-            <Animated.View style={[styles.ball, animatedStyles]}>
-              <DetallesCards x={det} />
-            </Animated.View>
-          </GestureDetector>
-        </GestureHandlerRootView>
+        <PanGestureHandler onGestureEvent={gesture}>
+          <Animated.View style={[styles.ball, animatedStyles]}>
+            <DetallesCards x={photos[detailsOf]} closeModal={setModalVisible} />
+          </Animated.View>
+        </PanGestureHandler>
       </Modal>
     </Portal>
   );

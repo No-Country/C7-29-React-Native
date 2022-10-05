@@ -1,4 +1,4 @@
-import { ScrollView, View, RefreshControl, StyleSheet } from "react-native";
+import { ScrollView, View, RefreshControl } from "react-native";
 import { useEffect, useState } from "react";
 import { getAllPhotosData } from "../redux/actions/photosActions";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,28 +10,20 @@ import { Snackbar } from "react-native-paper";
 import { cleanSnack } from "../redux/slices/snackBarSlice";
 import { cleanItem, addItemToCart } from "../redux/slices/cartSlice";
 import { useLanguage } from "../hooks/useLanguage";
-import { FAB, Badge } from "react-native-paper";
-
-//gesture test
-import { GestureDetector, Gesture } from "react-native-gesture-handler";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-} from "react-native-reanimated";
+import FABCart from "../components/FABCart/FABCart";
 
 export default function Home({ navigation }) {
-  const langstring = useSelector((state) => state.lang.lang);
-  const cart = useSelector((state) => state.cart.cartItems);
-  const { home } = useLanguage(langstring);
-  const { tabScreen } = useLanguage(langstring);
+  const { home } = useLanguage();
   const dispatch = useDispatch();
   const focus = useIsFocused();
+
   const photos = useSelector((state) => state.photos.filterPhotosData);
   const snack = useSelector((state) => state.snackBar.snackHome);
+
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
+
   useEffect(() => {
     async function f() {
       setRefresh(true);
@@ -60,38 +52,6 @@ export default function Home({ navigation }) {
       contentSize.height - paddingToBottom
     );
   };
-
-  //gestures
-
-  const isPressed = useSharedValue(false);
-  const offset = useSharedValue({ x: 0, y: 0 });
-
-  const animatedStyles = useAnimatedStyle(() => {
-    return {
-      transform: [
-        { translateX: offset.value.x },
-        { translateY: offset.value.y },
-        { scale: withSpring(isPressed.value ? 1.2 : 1) },
-      ],
-    };
-  });
-
-  const gesture = Gesture.Pan()
-    .onBegin(() => {
-      "worklet";
-      isPressed.value = true;
-    })
-    .onChange((e) => {
-      "worklet";
-      offset.value = {
-        x: e.changeX + offset.value.x,
-        y: e.changeY + offset.value.y,
-      };
-    })
-    .onFinalize(() => {
-      "worklet";
-      isPressed.value = false;
-    });
 
   return (
     <View style={{ height: "100%", width: "100%" }}>
@@ -139,20 +99,13 @@ export default function Home({ navigation }) {
         }}
       >
         {photos.length > 0
-          ? photos.map((x) => <HomeCards x={x} key={x._id} />)
+          ? photos.map((x, indice) => (
+              <HomeCards x={x} key={x._id} indice={indice} />
+            ))
           : null}
         <ActivityIndicator animating={loading || refresh} />
       </ScrollView>
-
-      <GestureDetector gesture={gesture}>
-        <Animated.View style={[styles.fab, animatedStyles]}>
-          <FAB
-            icon="cart"
-            onPress={() => navigation.navigate(tabScreen.cart)}
-          />
-          <Badge style={{ position: "absolute" }}>{cart.length}</Badge>
-        </Animated.View>
-      </GestureDetector>
+      <FABCart navigation={navigation} />
 
       <Snackbar
         visible={snack.visibility}
@@ -174,12 +127,3 @@ export default function Home({ navigation }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  fab: {
-    position: "absolute",
-    margin: 16,
-    right: 0,
-    bottom: 50,
-  },
-});

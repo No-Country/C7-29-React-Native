@@ -13,18 +13,11 @@ import RotateModal from "../../components/RotateModal/RotateModal";
 import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "../../hooks/useLanguage";
 
-export default function Home({ x }) {
+export default function Home({ x, indice }) {
   const langstring = useSelector((state) => state.lang.lang);
   const { home } = useLanguage(langstring);
 
   const [modalVisible, setModalVisible] = useState(false);
-  const containerStyle = {
-    backgroundColor: "white",
-    padding: 20,
-    width: "90%",
-    height: "80%",
-    alignSelf: "center",
-  };
 
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cartItems);
@@ -152,9 +145,10 @@ export default function Home({ x }) {
         width: "80%",
         alignSelf: "center",
         margin: "5%",
-        alignContent: "center",
+
         alignItems: "center",
       }}
+      mode="elevated"
       onPress={() => setModalVisible(true)}
     >
       <Card.Title
@@ -201,9 +195,8 @@ export default function Home({ x }) {
 
       <RotateModal
         modalVisible={modalVisible}
-        det={x}
         setModalVisible={setModalVisible}
-        containerStyle={containerStyle}
+        indice={indice}
       />
     </Card>
   );

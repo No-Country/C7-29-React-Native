@@ -1,4 +1,5 @@
 import { insertDataAllPhotos, setFilter } from "../slices/photosSlice";
+import { fillProfileData } from "../slices/profileSlice";
 
 export const getAllPhotosData = () => async (dispatch) => {
   return await fetch(`http://192.168.1.67:9000/api/publication`, {
@@ -58,4 +59,13 @@ export const deletePhoto = (id) => async (dispatch) => {
         .catch((e) => console.log(e));
     })
     .catch((e) => console.log(e));
+};
+
+export const getProfileDetails = (id) => async (dispatch) => {
+  return fetch(`http://192.168.1.67:9000/api/searchId/userForId/${id}`, {
+    method: "GET",
+  })
+    .then((response) => response.json())
+    .then((d) => dispatch(fillProfileData(d)))
+    .catch((e) => e);
 };
