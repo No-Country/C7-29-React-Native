@@ -65,6 +65,7 @@ const english = {
         btnOK: "Delete all",
         btnNo: "Kepp all",
       },
+      buy: "Buy",
     },
   },
 };

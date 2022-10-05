@@ -68,6 +68,7 @@ const spanish = {
         btnOK: "Borrar Todo",
         btnNo: "Conservar Carrito",
       },
+      buy: "Comprar",
     },
   },
 };

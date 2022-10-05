@@ -12,11 +12,13 @@ import {
   Button,
 } from "react-native-paper";
 import { cleanSnack } from "../redux/slices/snackBarSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cleanCart, cleanItem, addItemToCart } from "../redux/slices/cartSlice";
+import { buyItems } from "../redux/actions/photosActions";
+import * as Linking from "expo-linking";
 
 export default function FilterCards() {
-  const cart = useSelector((state) => state.cart.cartItems);
+  const cart = useSelector((state) => state.cart);
   const langstring = useSelector((state) => state.lang.lang);
   const { cartlang } = useLanguage(langstring);
   const { home } = useLanguage(langstring);
@@ -24,10 +26,30 @@ export default function FilterCards() {
   const snack = useSelector((state) => state.snackBar.snackHome);
   const [visible, setVisible] = useState(false);
   const hideDialog = () => setVisible(false);
+  const [state, setState] = useState("");
+  useEffect(() => {
+    async function t() {
+      const a = await buyItems(cart.cartItems);
+      setState(a);
+    }
+    t();
+  }, [cart]);
 
   return (
     <View>
-      <FAB icon="trash-can" onPress={() => setVisible(true)} />
+      <FAB
+        icon="trash-can"
+        onPress={() => setVisible(true)}
+        style={{
+          width: "20%",
+          alignSelf: "center",
+          alignContent: "center",
+          justifyContent: "center",
+        }}
+      />
+      <Button mode="contained" onPress={() => Linking.openURL(state)}>
+        {cartlang.buy} (Total: {cart.total})
+      </Button>
       <ScrollView
         style={{
           height: "95%",
@@ -35,12 +57,13 @@ export default function FilterCards() {
           alignContent: "center",
         }}
       >
-        {cart.length > 0 ? (
-          cart.map((x) => <CartCards x={x} key={x._id} />)
+        {cart.cartItems.length > 0 ? (
+          cart.cartItems.map((x) => <CartCards x={x} key={x._id} />)
         ) : (
           <Text>{cartlang.empty}</Text>
         )}
       </ScrollView>
+
       <Snackbar
         visible={snack.visibility}
         onDismiss={() => {

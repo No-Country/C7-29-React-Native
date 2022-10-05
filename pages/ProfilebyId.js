@@ -1,8 +1,9 @@
 import { useEffect } from "react";
-import { View, Image, Text } from "react-native";
+import { View, Image, Text, ScrollView } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfileDetails } from "../redux/actions/photosActions";
 import { cleanProfileDetails } from "../redux/slices/profileSlice";
+import HomeCards from "../components/HomeCards/HomeCards";
 
 export default function ProfilebyId({ route }) {
   const { id } = route.params;
@@ -12,7 +13,9 @@ export default function ProfilebyId({ route }) {
     dispatch(getProfileDetails(id));
     return () => dispatch(cleanProfileDetails());
   }, [dispatch, id]);
-  console.log(details);
+
+  var a = [...details.publications] || [];
+  a.reverse();
   return (
     <View style={{ width: "100%", height: "100%" }}>
       <Image
@@ -22,11 +25,25 @@ export default function ProfilebyId({ route }) {
       <Text>
         {details.name} {details.lastName}
       </Text>
-      
+
       <Text>Joined: {details.createdAt}</Text>
       {details.userType === "userPhotographer" ? (
         <Text>Photos: {details.publications.length}</Text>
       ) : null}
+
+      <ScrollView
+        style={{
+          height: "95%",
+          width: "100%",
+          alignContent: "center",
+        }}
+      >
+        {details.publications.length > 0
+          ? a.map((x, indice) => (
+              <HomeCards x={x} key={x._id} indice={indice} />
+            ))
+          : null}
+      </ScrollView>
     </View>
   );
 }

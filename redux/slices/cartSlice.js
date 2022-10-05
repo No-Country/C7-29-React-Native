@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const initialState = {
   cartItems: [],
+  total: 0,
 };
 
 const cartSlice = createSlice({
@@ -15,20 +16,23 @@ const cartSlice = createSlice({
           !(state.cartItems.filter((x) => x._id === payload._id).length > 0)
         ) {
           state.cartItems.push(payload);
-          AsyncStorage.setItem("cart", JSON.stringify(state.cartItems));
+          state.total = state.total + payload.price;
+          AsyncStorage.setItem("cart", JSON.stringify(state));
         }
       }
     },
     localStorageCart: (state, { payload }) => {
-      state.cartItems = payload || [];
+      state = payload || [];
     },
     cleanCart: (state) => {
-      state.cartItems = initialState.cartItems;
-      AsyncStorage.setItem("cart", JSON.stringify([]));
+      state = initialState;
+      AsyncStorage.setItem("cart", JSON.stringify({}));
     },
     cleanItem: (state, { payload }) => {
+      var removePrice = state.cartItems.filter((x) => x._id === payload);
       state.cartItems = state.cartItems.filter((x) => x._id !== payload);
-      AsyncStorage.setItem("cart", JSON.stringify(state.cartItems));
+      state.total = state.total - removePrice[0].price;
+      AsyncStorage.setItem("cart", JSON.stringify(state));
     },
   },
 });

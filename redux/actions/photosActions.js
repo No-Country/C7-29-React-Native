@@ -69,3 +69,14 @@ export const getProfileDetails = (id) => async (dispatch) => {
     .then((d) => dispatch(fillProfileData(d)))
     .catch((e) => e);
 };
+
+export const buyItems = async (data) => {
+  return fetch(`http://192.168.1.67:9000/api/mercadopago/buy`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  })
+    .then((response) => response.json())
+    .then((d) => d)
+    .catch((e) => e);
+};
