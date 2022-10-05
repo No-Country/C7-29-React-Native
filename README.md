@@ -77,9 +77,8 @@ Front End-React-Native con ExpoGo (mobile)
 
 Front-End Web
 - [Franco Rodriguez](https://www.linkedin.com/in/juan-franco-rodriguez/)
-- [Isaac Urdaneta]()
 - [rodrigo zucchini]()
-- [Mateo Marquez]()
+
 
 Back-End (web-mobile)
 - [Emanuel Juri](https://www.linkedin.com/in/emanuel-juri/) 
