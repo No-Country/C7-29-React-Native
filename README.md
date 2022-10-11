@@ -6,7 +6,7 @@ De forma legal, única y rápida. Podes comprar, vender, y descargar.
 
 <img src="https://github.com/No-Country/C7-G29/blob/dev/images/banner.png">
 
-Deploy: [Expo](https://expo.dev/@juanfranco/Dark-Room) (No es la version de develop)
+Deploy: [Expo](https://expo.dev/@juanfranco/Dark-Room) (No es la version de develop)(Se require descargar Expo desde iOS/Android store y escanear el qr con la aplicacion)
 
 ## Importante
 
