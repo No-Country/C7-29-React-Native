@@ -1,4 +1,12 @@
-# c7-29 Veriosn para app con React-Native Expo Go
+<h1 align="center">DarkRoom</h1>
+
+En el mundo de la fotografía, no es facil conseguir trabajo, ni mucho menos conseguir que valoren tu trabajo.
+Por eso nace Darkroom, la web que busca el crecimiento de emprendedores, fotógrafos, personas con proyectos personales o empresas que buscan imágenes inéditas y únicas.
+De forma legal, única y rápida. Podes comprar, vender, y descargar.
+
+<img src="https://github.com/No-Country/C7-G29/blob/dev/images/banner.png">
+
+Deploy: [Expo](https://expo.dev/@juanfranco/Dark-Room) (No es la version de develop)
 
 ## Importante
 
@@ -10,8 +18,7 @@ Esta es la version mobile app del proyecto C7-29 para funcionar correctamente se
 
 
 ## Tecnologias
-  - Front End: [React-Native](https://reactnative.dev/), [Redux-Toolkit](https://redux-toolkit.js.org
-)
+  - Front End: [React-Native](https://reactnative.dev/), [Redux-Toolkit](https://redux-toolkit.js.org), [Expo-Go](https://expo.dev/client)
   - Back End: [Node.js](https://nodejs.org), [Mongodb](https://www.mongodb.com/), [Express.js](https://expressjs.com/) 
   
 ## Features
