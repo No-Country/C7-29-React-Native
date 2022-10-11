@@ -11,10 +11,16 @@ import DetallesCards from "../DetallesCards/DetallesCards";
 import { Modal, Portal } from "react-native-paper";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import { useRoute } from "@react-navigation/native";
 
 export default function RotateModal({ modalVisible, setModalVisible, indice }) {
+  const route = useRoute();
   const x = useSharedValue(0);
-  const photos = useSelector((state) => state.photos.filterPhotosData);
+  const photos =
+    route.name === "ProfilebyId"
+      ? useSelector((state) => state.profile.userData.publications)
+      : useSelector((state) => state.photos.filterPhotosData);
+  const photographer = useSelector((state) => state.profile.userData);
   const [detailsOf, setDetailsOf] = useState(indice);
   var test = photos.length - 1;
 
@@ -77,7 +83,14 @@ export default function RotateModal({ modalVisible, setModalVisible, indice }) {
       >
         <PanGestureHandler onGestureEvent={gesture}>
           <Animated.View style={[styles.ball, animatedStyles]}>
-            <DetallesCards x={photos[detailsOf]} closeModal={setModalVisible} />
+            <DetallesCards
+              x={
+                route.name === "ProfilebyId"
+                  ? { ...photos[detailsOf], photographer }
+                  : photos[detailsOf]
+              }
+              closeModal={setModalVisible}
+            />
           </Animated.View>
         </PanGestureHandler>
       </Modal>

@@ -1,6 +1,6 @@
 import { insertDataAllPhotos, setFilter } from "../slices/photosSlice";
 import { fillProfileData } from "../slices/profileSlice";
-
+import { LogIn } from "../slices/userSlice";
 export const getAllPhotosData = () => async (dispatch) => {
   return await fetch(`http://192.168.1.67:9000/api/publication`, {
     method: "GET",
@@ -24,12 +24,14 @@ export const uploadPhotoForm = (data) => async () => {
       url: data.image.value,
       price: data.price.price,
       pay: data.price.paga,
-      photographer: "6331c311e0ca9f57d31205e3",
+      photographer: data._id,
+      tags: data.tags.value,
+      ubication: data.ubication.value,
     }),
   })
     .then((response) => response.json())
     .then((d) => d)
-    .catch((e) => e);
+    .catch((e) => console.log(e));
 };
 
 export const uploadPhotoToCloudinary = (e) => async () => {
@@ -75,6 +77,44 @@ export const buyItems = async (data) => {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
+  })
+    .then((response) => response.json())
+    .then((d) => d)
+    .catch((e) => e);
+};
+
+export const logInWhitJWT = (data) => async (dispatch) => {
+  return await fetch("http://192.168.1.67:9000/api/auth/loged", {
+    method: "GET",
+    headers: { Accept: "application/json", Authentication: data.jwt },
+  })
+    .then((response) => response.json())
+    .then((d) => dispatch(LogIn(d)))
+    .catch((e) => console.log(e));
+};
+
+export const addFollowed = (idPh, _idCurrent) => async () => {
+  console.log("addFollowing", idPh, _idCurrent);
+  return fetch(`http://192.168.1.67:9000/api/users/${_idCurrent}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      followed: idPh,
+    }),
+  })
+    .then((response) => response.json())
+    .then((d) => d)
+    .catch((e) => e);
+};
+
+export const addFollowers = (followers, idPh) => async () => {
+  console.log("addfollowers", followers, idPh);
+  return fetch(`http://192.168.1.67:9000/api/users/${idPh}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      followers: followers,
+    }),
   })
     .then((response) => response.json())
     .then((d) => d)

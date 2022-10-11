@@ -1,6 +1,6 @@
-import { Card, Button } from "react-native-paper";
+import { IconButton } from "react-native-paper";
+import { View, ImageBackground, TouchableHighlight } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { deletePhoto } from "../../redux/actions/photosActions";
 import { addItemToCart, cleanItem } from "../../redux/slices/cartSlice";
 import { addSnack } from "../../redux/slices/snackBarSlice";
 import * as FileSystem from "expo-file-system";
@@ -139,66 +139,44 @@ export default function Home({ x, indice }) {
   }
 
   return (
-    <Card
-      elevation={5}
-      style={{
-        width: "80%",
-        alignSelf: "center",
-        margin: "5%",
-
-        alignItems: "center",
-      }}
-      mode="elevated"
-      onPress={() => setModalVisible(true)}
-    >
-      <Card.Title
-        title={x.title}
-        subtitle={x.pay ? x.price + "$" : home.homeCards.free}
-      />
-
-      <Card.Cover source={{ uri: x.url }} style={{ width: 200, height: 200 }} />
-
-      {x.pay ? (
-        cart.filter((p) => p._id === x._id).length > 0 ? (
-          <Button
-            mode="contained"
-            icon="cart-arrow-up"
-            onPress={() => handleRemoveCart()}
-          >
-            {home.homeCards.btnRemoveCart}
-          </Button>
-        ) : (
-          <Button
-            mode="contained"
-            icon="cart-arrow-down"
-            onPress={() => handleAddCart()}
-          >
-            {home.homeCards.btnAddCart}
-          </Button>
-        )
-      ) : (
-        <Button
-          mode="contained"
-          onPress={async () => await downloadPhoto(x.url)}
-          icon="download"
-        >
-          {home.homeCards.download}
-        </Button>
-      )}
-      <Button
-        mode="contained"
-        icon="trash-can-outline"
-        onPress={() => dispatch(deletePhoto(x._id))}
+    <TouchableHighlight onPress={() => setModalVisible(true)}>
+      <ImageBackground
+        source={{ uri: x.url }}
+        style={{
+          width: "100%",
+          height: 400,
+        }}
       >
-        {home.homeCards.delete}
-      </Button>
-
-      <RotateModal
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        indice={indice}
-      />
-    </Card>
+        <View style={{ position: "absolute", right: 0, bottom: 0 }}>
+          {x.pay ? (
+            cart.filter((p) => p._id === x._id).length > 0 ? (
+              <IconButton
+                mode="contained"
+                icon="cart-arrow-up"
+                onPress={() => handleRemoveCart()}
+              />
+            ) : (
+              <IconButton
+                mode="contained"
+                icon="cart-arrow-down"
+                onPress={() => handleAddCart()}
+              />
+            )
+          ) : (
+            <IconButton
+              mode="contained"
+              onPress={async () => await downloadPhoto(x.url)}
+              icon="download"
+            />
+          )}
+        </View>
+        <RotateModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          indice={indice}
+        />
+      </ImageBackground>
+    </TouchableHighlight>
   );
 
   async function registerForPushNotificationsAsync() {

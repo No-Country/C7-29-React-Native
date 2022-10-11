@@ -12,12 +12,15 @@ import { useSelector } from "react-redux";
 export default function Publish() {
   const langstring = useSelector((state) => state.lang.lang);
   const { publication } = useLanguage(langstring);
+  const user = useSelector((state) => state.user.userData);
 
   const [formData, setFormData] = useState({
     title: { value: null },
     description: { value: null },
     image: { value: null, loading: false },
     price: { paga: false, price: null },
+    ubication: { value: null },
+    tags: { value: null },
     error: null,
     uploading: false,
   });
@@ -29,8 +32,10 @@ export default function Publish() {
 
   function publishButton() {
     if (
-      formData.title.value !== null &&
+      formData.title.value &&
       formData.description.value &&
+      formData.tags.value &&
+      formData.ubication.value &&
       formData.image.value &&
       (formData.price.price || !formData.price.paga) &&
       !formData.uploading
@@ -50,7 +55,7 @@ export default function Publish() {
 
   async function handleSubmit() {
     setFormData({ ...formData, uploading: true });
-    const a = uploadPhotoForm(formData);
+    const a = uploadPhotoForm({ ...formData, _id: user._id });
     const d = await a();
     if (d.message === "Publicacion creada correctamente") {
       setFormData({
@@ -58,6 +63,8 @@ export default function Publish() {
         description: { value: null },
         image: { value: null, loading: false },
         price: { paga: false, price: null },
+        ubication: { value: null },
+        tags: { value: null },
         uploading: false,
       });
     } else {
@@ -106,6 +113,13 @@ export default function Publish() {
     }
   }
 
+  function handleUbication(e) {
+    setFormData({ ...formData, ubication: { value: e } });
+  }
+  function handleTags(e) {
+    setFormData({ ...formData, tags: { value: e } });
+  }
+
   return (
     <View
       style={{
@@ -126,6 +140,18 @@ export default function Publish() {
         placeholder={publication.descrip_placehodler}
         onChangeText={(e) => handleDescription(e)}
         value={formData.description.value || ""}
+      ></TextInput>
+      <TextInput
+        id="formulario_ubicacion"
+        placeholder={publication.ubication}
+        onChangeText={(e) => handleUbication(e)}
+        value={formData.ubication.value || ""}
+      ></TextInput>
+      <TextInput
+        id="formulario_tags"
+        placeholder={publication.tags}
+        onChangeText={(e) => handleTags(e)}
+        value={formData.tags.value || ""}
       ></TextInput>
 
       <View style={{ flexDirection: "row" }}>
@@ -149,7 +175,7 @@ export default function Publish() {
             ? formData.image.value
             : "https://us.123rf.com/450wm/pavelstasevich/pavelstasevich1811/pavelstasevich181101028/112815904-no-image-available-icon-flat-vector-illustration.jpg?ver=6",
         }}
-        style={{ width: 200, height: 200, alignSelf: "center" }}
+        style={{ width: "100%", height: 300, alignSelf: "center" }}
       ></Image>
       <Button
         mode="contained"
@@ -184,11 +210,3 @@ export default function Publish() {
     </View>
   );
 }
-
-/*
-<input
-        id="formulario_uploadPhoto"
-        type="file"
-        onChange={(e) => handleImage(e)}
-      ></input>
-      */

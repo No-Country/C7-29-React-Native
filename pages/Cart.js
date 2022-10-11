@@ -27,9 +27,10 @@ export default function FilterCards() {
   const [visible, setVisible] = useState(false);
   const hideDialog = () => setVisible(false);
   const [state, setState] = useState("");
+  const user = useSelector((state) => state.user.userData);
   useEffect(() => {
     async function t() {
-      const a = await buyItems(cart.cartItems);
+      const a = await buyItems({ items: cart.cartItems, userId: user._id });
       setState(a);
     }
     t();

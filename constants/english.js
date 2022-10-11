@@ -31,6 +31,11 @@ const english = {
       hi: "Hello!",
       login: "Log In",
       logout: "Log Out",
+      follow: "Follow",
+      unfollow: "Unfollow",
+      followers: "Followers",
+      following: "Following",
+      publications: "Publications",
     },
     publication: {
       btn: "Upload Photo",
@@ -41,6 +46,8 @@ const english = {
       pay: ["Pay", "Free"],
       price: "Price...",
       price_error: "It only works whit positive numbers",
+      tags: "Tags, Example:'yellow,forest,wild,dirt/autumn/beautiful/dog'",
+      ubication: "Ubication...",
     },
     oherOptions: {
       home: "Home",
@@ -66,6 +73,13 @@ const english = {
         btnNo: "Kepp all",
       },
       buy: "Buy",
+    },
+    details: {
+      alertTitle: "Delete Photo",
+      alertDescritpion:
+        "You are about to delete a photo for ever, are you sure you want to proced?",
+      alertOk: "Yes, Delete photo",
+      alertNotOk: "No!, Keep Photo",
     },
   },
 };

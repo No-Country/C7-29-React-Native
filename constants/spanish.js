@@ -34,6 +34,11 @@ const spanish = {
       hi: "Hola!",
       login: "Ingresar",
       logout: "Salir",
+      follow: "Seguir",
+      unfollow: "Dejar de Seguir",
+      followers: "Seguidores",
+      following: "Siguiendo",
+      publications: "Publicaciones",
     },
     publication: {
       btn: "Subir Imagen",
@@ -44,6 +49,8 @@ const spanish = {
       pay: ["Paga", "Gratis"],
       price: "Precio...",
       price_error: "Solamente funciona con numeros positivos",
+      tags: "Tags, ejmplo:'amarillo,bosque,salvaje,tierra/otoño/hermoso/perro'",
+      ubication: "Ubicación...",
     },
     oherOptions: {
       home: "Inicio",
@@ -69,6 +76,13 @@ const spanish = {
         btnNo: "Conservar Carrito",
       },
       buy: "Comprar",
+    },
+    details: {
+      alertTitle: "Borrar Foto",
+      alertDescritpion:
+        "Estas a punto de borrar esta foto para siempre, seguro que deseas continuar?",
+      alertOk: "Si, borrar foto",
+      alertNotOk: "No!, Conservar foto",
     },
   },
 };

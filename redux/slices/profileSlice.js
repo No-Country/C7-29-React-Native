@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  userData: {},
+  userData: { followers: [] },
+  loading: true,
 };
 
 const profileSLice = createSlice({
@@ -10,9 +11,12 @@ const profileSLice = createSlice({
   reducers: {
     fillProfileData: (state, { payload }) => {
       state.userData = payload;
+      state.userData.publications.reverse();
+      state.loading = false;
     },
-    cleanProfileDetails: (state) => {
-      state = initialState;
+    cleanProfileDetails: (state, { payload }) => {
+      state.userData = { followers: [] };
+      state.loading = true;
     },
   },
 });

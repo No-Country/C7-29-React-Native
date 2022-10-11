@@ -1,6 +1,5 @@
 {
   "expo": {
-    "title": "Dark-Room",
     "scheme": "nativeversion",
     "plugins": [
       [
@@ -10,8 +9,8 @@
         }
       ]
     ],
-    "name": "NativeVersion",
-    "slug": "NativeVersion",
+    "name": "Dark-Room",
+    "slug": "Dark-Room",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
