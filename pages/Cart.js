@@ -36,6 +36,11 @@ export default function FilterCards() {
     t();
   }, [cart]);
 
+  function handleDelete() {
+    dispatch(cleanCart());
+    setVisible(false);
+  }
+
   return (
     <View>
       <FAB
@@ -93,10 +98,7 @@ export default function FilterCards() {
             <Button
               icon="trash-can"
               mode="contained"
-              onPress={() => {
-                dispatch(cleanCart());
-                setVisible(false);
-              }}
+              onPress={() => handleDelete()}
             >
               {cartlang.alert.btnOK}
             </Button>

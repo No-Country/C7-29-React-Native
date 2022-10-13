@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { View, Image } from "react-native";
 import { Switch, Button, Text } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { switchLang } from "../redux/slices/langSLice";
@@ -12,6 +12,10 @@ export default function OtherOptions({ navigation }) {
 
   return (
     <View>
+      <Image
+        source={require("./../assets/Group.png")}
+        style={{ width: 250, height: 100, alignSelf: "center" }}
+      ></Image>
       <Button
         title="Home"
         onPress={() => navigation.navigate(tabScreen.home)}

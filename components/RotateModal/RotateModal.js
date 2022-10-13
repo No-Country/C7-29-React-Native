@@ -13,12 +13,21 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
 
-export default function RotateModal({ modalVisible, setModalVisible, indice }) {
+export default function RotateModal({
+  modalVisible,
+  setModalVisible,
+  indice,
+  galery = null,
+}) {
   const route = useRoute();
   const x = useSharedValue(0);
   const photos =
-    route.name === "ProfilebyId"
+    galery === "galery"
       ? useSelector((state) => state.profile.userData.publications)
+      : galery === "liked"
+      ? useSelector((state) => state.profile.userData.liked)
+      : galery === "saved"
+      ? useSelector((state) => state.profile.userData.favorites)
       : useSelector((state) => state.photos.filterPhotosData);
   const photographer = useSelector((state) => state.profile.userData);
   const [detailsOf, setDetailsOf] = useState(indice);

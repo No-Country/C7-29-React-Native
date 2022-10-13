@@ -57,7 +57,7 @@ const spanish = {
       upload: "Subir Foto",
       profile: "Perfil",
       cart: "Carro de Compras",
-      language: "English/Español",
+      language: "Español",
       lightmode: "Modo Dia/Noche",
     },
     filterlang: {

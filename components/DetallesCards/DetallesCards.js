@@ -18,6 +18,9 @@ import { useLanguage } from "../../hooks/useLanguage";
 import {
   deletePhoto,
   getAllPhotosData,
+  addFavotites,
+  addLiked,
+  logInWhitJWT,
 } from "../../redux/actions/photosActions";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
@@ -27,6 +30,7 @@ import * as Device from "expo-device";
 
 export default function DetallesCards({ x, closeModal }) {
   const [visible, setIsVisible] = useState(false);
+  const [check, setCheck] = useState(false);
   const navigation = useNavigation();
   const cart = useSelector((state) => state.cart.cartItems);
   const dispatch = useDispatch();
@@ -34,6 +38,11 @@ export default function DetallesCards({ x, closeModal }) {
   const user = useSelector((state) => state.user.userData);
   const [visible2, setVisible2] = useState(false);
   const hideDialog = () => setVisible(false);
+
+  useEffect(() => {
+    dispatch(logInWhitJWT({ jwt: user.jwt }));
+  }, [check]);
+
   const onShare = async () => {
     try {
       const result = await Share.share({
@@ -160,6 +169,27 @@ export default function DetallesCards({ x, closeModal }) {
     });
   }
 
+  async function handleLike() {
+    if (user.liked.includes(x._id)) {
+      let aux = user.liked.filter((t) => t !== x._id);
+      await dispatch(addLiked(aux, user._id));
+      return setCheck(!check);
+    } else {
+      await dispatch(addLiked([...user.liked, x._id], user._id));
+      setCheck(!check);
+    }
+  }
+  async function handleSaved() {
+    if (user.favorites.includes(x._id)) {
+      let aux = user.favorites.filter((t) => t !== x._id);
+      await dispatch(addFavotites(aux, user._id));
+      return setCheck(!check);
+    } else {
+      await dispatch(addFavotites([...user.favorites, x._id], user._id));
+      setCheck(!check);
+    }
+  }
+
   return (
     <View
       style={{
@@ -224,6 +254,23 @@ export default function DetallesCards({ x, closeModal }) {
 
       <View style={{ flexDirection: "row" }}>
         <Button onPress={onShare}>Share</Button>
+        {user.loged ? (
+          <View style={{ flexDirection: "row" }}>
+            <IconButton
+              mode="contained"
+              selected={user.favorites.includes(x._id)}
+              icon="bookmark-multiple"
+              onPress={() => handleSaved()}
+            />
+            <IconButton
+              mode="contained"
+              selected={user.liked.includes(x._id)}
+              icon="cards-heart"
+              onPress={() => handleLike()}
+            />
+          </View>
+        ) : null}
+
         {x.pay ? (
           cart.filter((p) => p._id === x._id).length > 0 ? (
             <IconButton

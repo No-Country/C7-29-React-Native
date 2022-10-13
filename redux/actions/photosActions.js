@@ -86,7 +86,10 @@ export const buyItems = async (data) => {
 export const logInWhitJWT = (data) => async (dispatch) => {
   return await fetch("http://192.168.1.67:9000/api/auth/loged", {
     method: "GET",
-    headers: { Accept: "application/json", Authentication: data.jwt },
+    headers: {
+      Accept: "application/json",
+      Authentication: data.jwt,
+    },
   })
     .then((response) => response.json())
     .then((d) => dispatch(LogIn(d)))
@@ -114,6 +117,32 @@ export const addFollowers = (followers, idPh) => async () => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       followers: followers,
+    }),
+  })
+    .then((response) => response.json())
+    .then((d) => d)
+    .catch((e) => e);
+};
+
+export const addLiked = (id, _idCurrent) => async () => {
+  return fetch(`http://192.168.1.67:9000/api/users/${_idCurrent}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      liked: id,
+    }),
+  })
+    .then((response) => response.json())
+    .then((d) => d)
+    .catch((e) => e);
+};
+
+export const addFavotites = (id, _idCurrent) => async () => {
+  return fetch(`http://192.168.1.67:9000/api/users/${_idCurrent}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      favorites: id,
     }),
   })
     .then((response) => response.json())

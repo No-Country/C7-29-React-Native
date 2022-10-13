@@ -25,7 +25,8 @@ const cartSlice = createSlice({
       state = payload || [];
     },
     cleanCart: (state) => {
-      state = initialState;
+      state.cartItems = initialState.cartItems;
+      state.total = initialState.total;
       AsyncStorage.setItem("cart", JSON.stringify({}));
     },
     cleanItem: (state, { payload }) => {

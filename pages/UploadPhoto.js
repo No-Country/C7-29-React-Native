@@ -4,7 +4,7 @@ import {
   uploadPhotoToCloudinary,
 } from "../redux/actions/photosActions";
 import { Button, TextInput, HelperText } from "react-native-paper";
-import { Image, View } from "react-native";
+import { Image, ScrollView, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useLanguage } from "../hooks/useLanguage";
 import { useSelector } from "react-redux";
@@ -121,9 +121,8 @@ export default function Publish() {
   }
 
   return (
-    <View
+    <ScrollView
       style={{
-        justifyContent: "center",
         alignContent: "center",
         alignContent: "center",
         height: "100%",
@@ -207,6 +206,6 @@ export default function Publish() {
         </>
       ) : null}
       {publishButton()}
-    </View>
+    </ScrollView>
   );
 }

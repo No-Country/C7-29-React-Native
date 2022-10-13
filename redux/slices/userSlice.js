@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  userData: { loged: false },
+  userData: { loged: false, favorites: [], liked: [] },
 };
 
 const userSlice = createSlice({
@@ -9,7 +9,13 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     LogIn: (state, { payload }) => {
-      state.userData = { ...payload, loged: true };
+      if (!payload.message) {
+        state.userData = {
+          ...payload.userLoged,
+          loged: true,
+          jwt: payload.token,
+        };
+      }
     },
     LogOut: (state, { payload }) => {
       state.userData = { loged: false };

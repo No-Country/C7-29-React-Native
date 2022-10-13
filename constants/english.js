@@ -54,7 +54,7 @@ const english = {
       upload: "Upload Photo",
       profile: "Profile",
       cart: "Shopping cart",
-      language: "English/Español",
+      language: "English",
       lightmode: "Mode Night/Day",
     },
     filterlang: {

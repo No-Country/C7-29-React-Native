@@ -1,6 +1,6 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { View, Image, Text, ScrollView } from "react-native";
-import { Button, ActivityIndicator } from "react-native-paper";
+import { Button, ActivityIndicator, IconButton } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getProfileDetails,
@@ -23,6 +23,7 @@ export default function ProfilebyId({ route }) {
   const loading = useSelector((state) => state.profile.loading);
   const user = useSelector((state) => state.user.userData);
   const isFocused = useIsFocused();
+  const [galery, setGalery] = useState("galery");
 
   useFocusEffect(
     useCallback(() => {
@@ -39,7 +40,9 @@ export default function ProfilebyId({ route }) {
     }
   }, [isFocused]);
 
-  var a = details.publications ? [...details.publications] : [];
+  var g = details.publications ? [...details.publications] : [];
+  var s = details.favorites ? [...details.favorites] : [];
+  var l = details.liked ? [...details.liked] : [];
 
   const logout = async () => {
     dispatch(LogOut());
@@ -145,6 +148,33 @@ export default function App() {
             </Button>
           )}
 
+          <View
+            style={{
+              flexDirection: "row",
+              width: "100%",
+              justifyContent: "space-around",
+            }}
+          >
+            <IconButton
+              mode="contained"
+              selected={galery === "galery"}
+              icon="camera"
+              onPress={() => setGalery("galery")}
+            />
+            <IconButton
+              mode="contained"
+              selected={galery === "saved"}
+              icon="bookmark-multiple"
+              onPress={() => setGalery("saved")}
+            />
+            <IconButton
+              mode="contained"
+              selected={galery === "liked"}
+              icon="cards-heart"
+              onPress={() => setGalery("liked")}
+            />
+          </View>
+
           <ScrollView
             style={{
               height: "95%",
@@ -152,8 +182,8 @@ export default function App() {
               alignContent: "center",
             }}
           >
-            {a.length > 0
-              ? a.map((x, indice) => {
+            {galery === "galery"
+              ? g.map((x, indice) => {
                   return (
                     <HomeCards
                       x={{
@@ -167,10 +197,47 @@ export default function App() {
                       }}
                       key={x._id}
                       indice={indice}
+                      galery="galery"
                     />
                   );
                 })
-              : null}
+              : galery === "liked"
+              ? l.map((x, indice) => {
+                  return (
+                    <HomeCards
+                      x={{
+                        ...x,
+                        photographer: {
+                          _id: details._id,
+                          avatar: details.avatar,
+                          name: details.name,
+                          lastName: details.lastName,
+                        },
+                      }}
+                      key={x._id}
+                      indice={indice}
+                      galery="liked"
+                    />
+                  );
+                })
+              : s.map((x, indice) => {
+                  return (
+                    <HomeCards
+                      x={{
+                        ...x,
+                        photographer: {
+                          _id: details._id,
+                          avatar: details.avatar,
+                          name: details.name,
+                          lastName: details.lastName,
+                        },
+                      }}
+                      key={x._id}
+                      indice={indice}
+                      galery="saved"
+                    />
+                  );
+                })}
           </ScrollView>
         </View>
       ) : (

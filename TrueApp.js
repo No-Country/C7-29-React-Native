@@ -61,6 +61,7 @@ export default function TrueApp() {
           ),
         }}
       />
+
       {user.loged ? (
         <Tab.Screen
           name={tabScreen.profile}

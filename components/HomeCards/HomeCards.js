@@ -13,7 +13,7 @@ import RotateModal from "../../components/RotateModal/RotateModal";
 import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "../../hooks/useLanguage";
 
-export default function Home({ x, indice }) {
+export default function Home({ x, indice, galery }) {
   const langstring = useSelector((state) => state.lang.lang);
   const { home } = useLanguage(langstring);
 
@@ -174,6 +174,7 @@ export default function Home({ x, indice }) {
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
           indice={indice}
+          galery={galery}
         />
       </ImageBackground>
     </TouchableHighlight>
