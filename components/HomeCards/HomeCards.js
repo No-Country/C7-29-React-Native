@@ -36,24 +36,18 @@ export default function Home({ x, indice, galery }) {
   const responseListener = useRef();
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      setExpoPushToken(token)
-    );
+    registerForPushNotificationsAsync().then((token) => setExpoPushToken(token));
 
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
-        setNotification(notification);
-      });
+    notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
+      setNotification(notification);
+    });
 
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
-      });
+    responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
+      console.log(response);
+    });
 
     return () => {
-      Notifications.removeNotificationSubscription(
-        notificationListener.current
-      );
+      Notifications.removeNotificationSubscription(notificationListener.current);
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
@@ -62,13 +56,7 @@ export default function Home({ x, indice, galery }) {
     await Notifications.scheduleNotificationAsync({
       content: {
         title: home.homeCards.notificacion.title,
-        body:
-          home.homeCards.notificacion.body[0] +
-          " " +
-          x.title +
-          x._id[0] +
-          x._id[x._id.length - 1] +
-          home.homeCards.notificacion.body[1],
+        body: home.homeCards.notificacion.body[0] + " " + x.title + x._id[0] + x._id[x._id.length - 1] + home.homeCards.notificacion.body[1],
         data: {
           data: "Image its an id.jpg in the downloads file of your device",
         },
@@ -79,16 +67,12 @@ export default function Home({ x, indice, galery }) {
 
   //Download photo code
 
-  const [statusFiles, requestPermissionFiles] =
-    ImagePicker.useMediaLibraryPermissions();
+  const [statusFiles, requestPermissionFiles] = ImagePicker.useMediaLibraryPermissions();
 
   async function downloadPhoto(url) {
     const checkPermisions = await ImagePicker.getCameraPermissionsAsync();
     if (checkPermisions.granted) {
-      FileSystem.downloadAsync(
-        url,
-        FileSystem.documentDirectory + x._id + ".jpg"
-      )
+      FileSystem.downloadAsync(url, FileSystem.documentDirectory + x._id + ".jpg")
         .then(async ({ uri }) => {
           const asset = await MediaLibrary.createAssetAsync(uri);
           await MediaLibrary.createAlbumAsync("Download", asset, false);
@@ -99,10 +83,7 @@ export default function Home({ x, indice, galery }) {
         });
     } else {
       await requestPermissionFiles();
-      FileSystem.downloadAsync(
-        url,
-        FileSystem.documentDirectory + x._id + ".jpg"
-      )
+      FileSystem.downloadAsync(url, FileSystem.documentDirectory + x._id + ".jpg")
         .then(async ({ uri }) => {
           const asset = await MediaLibrary.createAssetAsync(uri);
           await MediaLibrary.createAlbumAsync("Download", asset, false);
@@ -150,32 +131,15 @@ export default function Home({ x, indice, galery }) {
         <View style={{ position: "absolute", right: 0, bottom: 0 }}>
           {x.pay ? (
             cart.filter((p) => p._id === x._id).length > 0 ? (
-              <IconButton
-                mode="contained"
-                icon="cart-arrow-up"
-                onPress={() => handleRemoveCart()}
-              />
+              <IconButton mode="contained" selected icon="cart-arrow-up" onPress={() => handleRemoveCart()} />
             ) : (
-              <IconButton
-                mode="contained"
-                icon="cart-arrow-down"
-                onPress={() => handleAddCart()}
-              />
+              <IconButton mode="contained" icon="cart-arrow-down" onPress={() => handleAddCart()} />
             )
           ) : (
-            <IconButton
-              mode="contained"
-              onPress={async () => await downloadPhoto(x.url)}
-              icon="download"
-            />
+            <IconButton mode="contained" onPress={async () => await downloadPhoto(x.url)} icon="download" />
           )}
         </View>
-        <RotateModal
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-          indice={indice}
-          galery={galery}
-        />
+        <RotateModal modalVisible={modalVisible} setModalVisible={setModalVisible} indice={indice} galery={galery} />
       </ImageBackground>
     </TouchableHighlight>
   );
@@ -193,8 +157,7 @@ export default function Home({ x, indice, galery }) {
     }
 
     if (Device.isDevice) {
-      const { status: existingStatus } =
-        await Notifications.getPermissionsAsync();
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
       let finalStatus = existingStatus;
       if (existingStatus !== "granted") {
         const { status } = await Notifications.requestPermissionsAsync();

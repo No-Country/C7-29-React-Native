@@ -2,15 +2,7 @@ import { ScrollView, View, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useLanguage } from "../hooks/useLanguage";
 import CartCards from "../components/CartCards/CartCards";
-import {
-  Snackbar,
-  Text,
-  FAB,
-  Dialog,
-  Portal,
-  Paragraph,
-  Button,
-} from "react-native-paper";
+import { Snackbar, Text, FAB, Dialog, Portal, Paragraph, Button } from "react-native-paper";
 import { cleanSnack } from "../redux/slices/snackBarSlice";
 import { useEffect, useState } from "react";
 import { cleanCart, cleanItem, addItemToCart } from "../redux/slices/cartSlice";
@@ -58,16 +50,12 @@ export default function FilterCards() {
       </Button>
       <ScrollView
         style={{
-          height: "95%",
+          height: "85%",
           width: "100%",
           alignContent: "center",
         }}
       >
-        {cart.cartItems.length > 0 ? (
-          cart.cartItems.map((x) => <CartCards x={x} key={x._id} />)
-        ) : (
-          <Text>{cartlang.empty}</Text>
-        )}
+        {cart.cartItems.length > 0 ? cart.cartItems.map((x) => <CartCards x={x} key={x._id} />) : <Text>{cartlang.empty}</Text>}
       </ScrollView>
 
       <Snackbar
@@ -78,9 +66,7 @@ export default function FilterCards() {
         action={{
           label: home.undo,
           onPress: () => {
-            snack.inCart
-              ? dispatch(cleanItem(snack.action))
-              : dispatch(addItemToCart(snack.action));
+            snack.inCart ? dispatch(cleanItem(snack.action)) : dispatch(addItemToCart(snack.action));
           },
         }}
         duration={3000}
@@ -90,16 +76,10 @@ export default function FilterCards() {
       <Portal>
         <Dialog visible={visible} onDismiss={hideDialog}>
           <Dialog.Icon icon="alert" />
-          <Dialog.Title style={styles.title}>
-            {cartlang.alert.title}
-          </Dialog.Title>
+          <Dialog.Title style={styles.title}>{cartlang.alert.title}</Dialog.Title>
           <Dialog.Content>
             <Paragraph>{cartlang.alert.text}</Paragraph>
-            <Button
-              icon="trash-can"
-              mode="contained"
-              onPress={() => handleDelete()}
-            >
+            <Button icon="trash-can" mode="contained" onPress={() => handleDelete()}>
               {cartlang.alert.btnOK}
             </Button>
             <Button

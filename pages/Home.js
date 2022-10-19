@@ -41,16 +41,9 @@ export default function Home({ navigation }) {
     setRefresh(false);
   }
 
-  const isCloseToBottom = ({
-    layoutMeasurement,
-    contentOffset,
-    contentSize,
-  }) => {
+  const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
     const paddingToBottom = 20;
-    return (
-      layoutMeasurement.height + contentOffset.y >=
-      contentSize.height - paddingToBottom
-    );
+    return layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
   };
 
   return (
@@ -86,23 +79,14 @@ export default function Home({ navigation }) {
           width: "100%",
           alignContent: "center",
         }}
-        refreshControl={
-          <RefreshControl
-            refreshing={loading}
-            onRefresh={() => handleRefresh()}
-          />
-        }
+        refreshControl={<RefreshControl refreshing={loading} onRefresh={() => handleRefresh()} />}
         onScroll={({ nativeEvent }) => {
           if (isCloseToBottom(nativeEvent)) {
             handleRefresh();
           }
         }}
       >
-        {photos.length > 0
-          ? photos.map((x, indice) => (
-              <HomeCards x={x} key={x._id} indice={indice} />
-            ))
-          : null}
+        {photos.length > 0 ? photos.map((x, indice) => <HomeCards x={x} key={x._id} indice={indice} />) : null}
         <ActivityIndicator animating={loading || refresh} />
       </ScrollView>
       <FABCart navigation={navigation} />
@@ -115,9 +99,7 @@ export default function Home({ navigation }) {
         action={{
           label: home.undo,
           onPress: () => {
-            snack.inCart
-              ? dispatch(cleanItem(snack.action))
-              : dispatch(addItemToCart(snack.action));
+            snack.inCart ? dispatch(cleanItem(snack.action)) : dispatch(addItemToCart(snack.action));
           },
         }}
         duration={3000}

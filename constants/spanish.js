@@ -15,10 +15,7 @@ const spanish = {
       homeCards: {
         notificacion: {
           title: "Imagen Correctamente Descargada",
-          body: [
-            "Puedes Encontrar",
-            ".jpg en la carpeta de Imagenes Descargadas de tu dispositivo",
-          ],
+          body: ["Puedes Encontrar", ".jpg en la carpeta de Imagenes Descargadas de tu dispositivo"],
         },
         details: "Detalles",
         handleAddCart: "Añadido al carro!",
@@ -51,6 +48,7 @@ const spanish = {
       price_error: "Solamente funciona con numeros positivos",
       tags: "Tags, ejmplo:'amarillo,bosque,salvaje,tierra/otoño/hermoso/perro'",
       ubication: "Ubicación...",
+      reto: "No Participo",
     },
     oherOptions: {
       home: "Inicio",
@@ -66,6 +64,8 @@ const spanish = {
       search: "Buscar...",
       reset: "Resetear Filtro",
       tipo: ["Gratis", "Pago", "Todo"],
+      reto: "Todos los retos",
+      expired: "Caducado",
     },
     cartlang: {
       empty: "El carro esta vacio",
@@ -79,8 +79,7 @@ const spanish = {
     },
     details: {
       alertTitle: "Borrar Foto",
-      alertDescritpion:
-        "Estas a punto de borrar esta foto para siempre, seguro que deseas continuar?",
+      alertDescritpion: "Estas a punto de borrar esta foto para siempre, seguro que deseas continuar?",
       alertOk: "Si, borrar foto",
       alertNotOk: "No!, Conservar foto",
     },

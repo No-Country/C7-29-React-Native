@@ -5,6 +5,7 @@ import user from "../slices/userSlice";
 import snackBar from "../slices/snackBarSlice";
 import lang from "../slices/langSLice";
 import profile from "../slices/profileSlice";
+import challenge from "../slices/challengeSlice";
 
 export default configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export default configureStore({
     snackBar,
     lang,
     profile,
+    challenge,
   },
 });

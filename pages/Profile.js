@@ -20,7 +20,7 @@ export default function Profile() {
   const langstring = useSelector((state) => state.lang.lang);
   const { profile } = useLanguage(langstring);
   const dispatch = useDispatch();
-  const authorizationEndpoint = "http://192.168.1.67:3000/loginMobile";
+  const authorizationEndpoint = "https://frontendc7-darkroom.vercel.app/loginMobile";
   const useProxy = Platform.select({ web: false, default: true });
   const redirectUri = AuthSession.makeRedirectUri({ useProxy });
   WebBrowser.maybeCompleteAuthSession();
@@ -43,10 +43,7 @@ export default function Profile() {
   useEffect(() => {
     if (result)
       if (result.error) {
-        Alert.alert(
-          "Authentication error",
-          result.params.error_description || "something went wrong"
-        );
+        Alert.alert("Authentication error", result.params.error_description || "something went wrong");
       } else if (result.type === "success") {
         const decoded = jwtDecode(result.params.jwt);
         dispatch(logInWhitJWT({ ...decoded, jwt: result.params.jwt }));

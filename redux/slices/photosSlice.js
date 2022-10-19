@@ -6,6 +6,8 @@ const initialState = {
   filterOptions: {
     priceRange: { max: null, min: null, pay: null },
     title: null,
+    reto: null,
+    order: null,
   },
 };
 
@@ -14,23 +16,22 @@ const initialState = {
 //Funcion
 
 export const functionFilter = (newArray, payload) => {
-  if (payload.priceRange.pay !== null)
-    newArray = newArray.filter((x) => x.pay === payload.priceRange.pay);
+  if (payload.priceRange.pay !== null) newArray = newArray.filter((x) => x.pay === payload.priceRange.pay);
 
-  if (payload.priceRange.min !== null)
-    newArray = newArray.filter(
-      (x) => x.price > payload.priceRange.min && x.pay
-    );
+  if (payload.priceRange.min !== null) newArray = newArray.filter((x) => x.price > payload.priceRange.min && x.pay);
 
-  if (payload.priceRange.max !== null)
-    newArray = newArray.filter(
-      (x) => x.price < payload.priceRange.max || !x.pay
-    );
+  if (payload.priceRange.max !== null) newArray = newArray.filter((x) => x.price < payload.priceRange.max || !x.pay);
 
-  if (payload.title)
-    newArray = newArray.filter((x) =>
-      x.title.toLowerCase().includes(payload.title.toLowerCase())
-    );
+  if (payload.title) newArray = newArray.filter((x) => x.title.toLowerCase().includes(payload.title.toLowerCase()));
+
+  if (payload.reto) newArray = newArray.filter((x) => x.challenge === payload.reto);
+
+  if (payload.order) {
+    if (payload.order === "+likes-") newArray = newArray.sort((a, b) => a.likes.length - b.likes.length);
+    else if (payload.order === "-likes+") newArray = newArray.sort((a, b) => b.likes.length - a.likes.length);
+    else if (payload.order === "+price-") newArray = newArray.sort((a, b) => a.price - b.price);
+    else newArray = newArray.sort((a, b) => a.price - b.price);
+  }
 
   return newArray;
 };
@@ -57,6 +58,5 @@ const photosSlice = createSlice({
   },
 });
 
-export const { insertDataAllPhotos, cleanPhotos, setFilter } =
-  photosSlice.actions;
+export const { insertDataAllPhotos, cleanPhotos, setFilter } = photosSlice.actions;
 export default photosSlice.reducer;

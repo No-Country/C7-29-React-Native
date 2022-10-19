@@ -94,7 +94,9 @@ export default function RotateModal({
           <Animated.View style={[styles.ball, animatedStyles]}>
             <DetallesCards
               x={
-                route.name === "ProfilebyId"
+                route.name === "ProfilebyId" ||
+                route.name === "Profile" ||
+                route.name === "Perfil"
                   ? { ...photos[detailsOf], photographer }
                   : photos[detailsOf]
               }

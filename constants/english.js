@@ -48,6 +48,7 @@ const english = {
       price_error: "It only works whit positive numbers",
       tags: "Tags, Example:'yellow,forest,wild,dirt/autumn/beautiful/dog'",
       ubication: "Ubication...",
+      reto: "Don't participate",
     },
     oherOptions: {
       home: "Home",
@@ -63,6 +64,8 @@ const english = {
       search: "Search...",
       reset: "Reset Filter",
       tipo: ["All", "Pay", "Free"],
+      reto: "All chalenges",
+      expired: "Expired",
     },
     cartlang: {
       empty: "The cart is empty",
@@ -76,8 +79,7 @@ const english = {
     },
     details: {
       alertTitle: "Delete Photo",
-      alertDescritpion:
-        "You are about to delete a photo for ever, are you sure you want to proced?",
+      alertDescritpion: "You are about to delete a photo for ever, are you sure you want to proced?",
       alertOk: "Yes, Delete photo",
       alertNotOk: "No!, Keep Photo",
     },

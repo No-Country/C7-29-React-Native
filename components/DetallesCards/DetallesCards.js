@@ -1,11 +1,4 @@
-import {
-  Text,
-  Button,
-  IconButton,
-  Portal,
-  Paragraph,
-  Dialog,
-} from "react-native-paper";
+import { Text, Button, IconButton, Portal, Paragraph, Dialog, Badge } from "react-native-paper";
 import { View, Image, TouchableHighlight, Share } from "react-native";
 import ImageView from "react-native-image-viewing";
 import { useState, useRef, useEffect } from "react";
@@ -15,13 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addItemToCart, cleanItem } from "../../redux/slices/cartSlice";
 import { addSnack } from "../../redux/slices/snackBarSlice";
 import { useLanguage } from "../../hooks/useLanguage";
-import {
-  deletePhoto,
-  getAllPhotosData,
-  addFavotites,
-  addLiked,
-  logInWhitJWT,
-} from "../../redux/actions/photosActions";
+import { deletePhoto, getAllPhotosData, addFavotites, addLiked, logInWhitJWT, modifyLikesPublication } from "../../redux/actions/photosActions";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
@@ -79,16 +66,12 @@ export default function DetallesCards({ x, closeModal }) {
 
   //Download photo code
 
-  const [statusFiles, requestPermissionFiles] =
-    ImagePicker.useMediaLibraryPermissions();
+  const [statusFiles, requestPermissionFiles] = ImagePicker.useMediaLibraryPermissions();
 
   async function downloadPhoto(url) {
     const checkPermisions = await ImagePicker.getCameraPermissionsAsync();
     if (checkPermisions.granted) {
-      FileSystem.downloadAsync(
-        url,
-        FileSystem.documentDirectory + x._id + ".jpg"
-      )
+      FileSystem.downloadAsync(url, FileSystem.documentDirectory + x._id + ".jpg")
         .then(async ({ uri }) => {
           const asset = await MediaLibrary.createAssetAsync(uri);
           await MediaLibrary.createAlbumAsync("Download", asset, false);
@@ -99,10 +82,7 @@ export default function DetallesCards({ x, closeModal }) {
         });
     } else {
       await requestPermissionFiles();
-      FileSystem.downloadAsync(
-        url,
-        FileSystem.documentDirectory + x._id + ".jpg"
-      )
+      FileSystem.downloadAsync(url, FileSystem.documentDirectory + x._id + ".jpg")
         .then(async ({ uri }) => {
           const asset = await MediaLibrary.createAssetAsync(uri);
           await MediaLibrary.createAlbumAsync("Download", asset, false);
@@ -128,24 +108,18 @@ export default function DetallesCards({ x, closeModal }) {
   const responseListener = useRef();
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      setExpoPushToken(token)
-    );
+    registerForPushNotificationsAsync().then((token) => setExpoPushToken(token));
 
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
-        setNotification(notification);
-      });
+    notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
+      setNotification(notification);
+    });
 
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
-      });
+    responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
+      console.log(response);
+    });
 
     return () => {
-      Notifications.removeNotificationSubscription(
-        notificationListener.current
-      );
+      Notifications.removeNotificationSubscription(notificationListener.current);
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
@@ -154,13 +128,7 @@ export default function DetallesCards({ x, closeModal }) {
     await Notifications.scheduleNotificationAsync({
       content: {
         title: home.homeCards.notificacion.title,
-        body:
-          home.homeCards.notificacion.body[0] +
-          " " +
-          x.title +
-          x._id[0] +
-          x._id[x._id.length - 1] +
-          home.homeCards.notificacion.body[1],
+        body: home.homeCards.notificacion.body[0] + " " + x.title + x._id[0] + x._id[x._id.length - 1] + home.homeCards.notificacion.body[1],
         data: {
           data: "Image its an id.jpg in the downloads file of your device",
         },
@@ -172,10 +140,13 @@ export default function DetallesCards({ x, closeModal }) {
   async function handleLike() {
     if (user.liked.includes(x._id)) {
       let aux = user.liked.filter((t) => t !== x._id);
+      let auxpost = x.likes.filter((t) => t !== user._id);
       await dispatch(addLiked(aux, user._id));
+      await dispatch(modifyLikesPublication(auxpost, x._id));
       return setCheck(!check);
     } else {
       await dispatch(addLiked([...user.liked, x._id], user._id));
+      await dispatch(modifyLikesPublication([...x.likes, user._id], x._id));
       setCheck(!check);
     }
   }
@@ -201,23 +172,11 @@ export default function DetallesCards({ x, closeModal }) {
       }}
     >
       <Text style={{ fontSize: 25 }}>{x.title}</Text>
-      <TouchableHighlight
-        onPress={() => setIsVisible(true)}
-        style={{ height: "50%", width: "100%" }}
-      >
-        <Image
-          source={{ uri: x.url }}
-          style={{ width: "100%", height: "100%" }}
-        />
+      <TouchableHighlight onPress={() => setIsVisible(true)} style={{ height: "50%", width: "100%" }}>
+        <Image source={{ uri: x.url }} style={{ width: "100%", height: "100%" }} />
       </TouchableHighlight>
 
-      <ImageView
-        images={[{ uri: x.url }]}
-        imageIndex={0}
-        visible={visible}
-        onRequestClose={() => setIsVisible(false)}
-        style={{ width: "50%", height: "50%" }}
-      />
+      <ImageView images={[{ uri: x.url }]} imageIndex={0} visible={visible} onRequestClose={() => setIsVisible(false)} style={{ width: "50%", height: "50%" }} />
       <TouchableHighlight
         onPress={() => {
           navigation.navigate("ProfilebyId", { id: x.photographer._id });
@@ -256,49 +215,26 @@ export default function DetallesCards({ x, closeModal }) {
         <Button onPress={onShare}>Share</Button>
         {user.loged ? (
           <View style={{ flexDirection: "row" }}>
-            <IconButton
-              mode="contained"
-              selected={user.favorites.includes(x._id)}
-              icon="bookmark-multiple"
-              onPress={() => handleSaved()}
-            />
-            <IconButton
-              mode="contained"
-              selected={user.liked.includes(x._id)}
-              icon="cards-heart"
-              onPress={() => handleLike()}
-            />
+            <IconButton mode="contained" selected={user.favorites.includes(x._id)} icon="bookmark-multiple" onPress={() => handleSaved()} />
+            <View>
+              <Badge style={{ position: "absolute", zIndex: 99 }} visible={true}>
+                {x.likes.includes(user._id) ? x.likes.length : user.liked.includes(x._id) ? x.likes.length + 1 : x.likes.length}
+              </Badge>
+              <IconButton mode="contained" selected={user.liked.includes(x._id)} icon="cards-heart" onPress={() => handleLike()} />
+            </View>
           </View>
         ) : null}
 
         {x.pay ? (
           cart.filter((p) => p._id === x._id).length > 0 ? (
-            <IconButton
-              mode="contained"
-              icon="cart-arrow-up"
-              onPress={() => handleRemoveCart()}
-            />
+            <IconButton mode="contained" icon="cart-arrow-up" onPress={() => handleRemoveCart()} />
           ) : (
-            <IconButton
-              mode="contained"
-              icon="cart-arrow-down"
-              onPress={() => handleAddCart()}
-            />
+            <IconButton mode="contained" icon="cart-arrow-down" onPress={() => handleAddCart()} />
           )
         ) : (
-          <IconButton
-            mode="contained"
-            onPress={async () => await downloadPhoto(x.url)}
-            icon="download"
-          />
+          <IconButton mode="contained" onPress={async () => await downloadPhoto(x.url)} icon="download" />
         )}
-        {user._id === x.photographer._id ? (
-          <IconButton
-            mode="contained"
-            icon="trash-can"
-            onPress={() => setVisible2(true)}
-          />
-        ) : null}
+        {user._id === x.photographer._id ? <IconButton mode="contained" icon="trash-can" onPress={() => setVisible2(true)} /> : null}
       </View>
 
       <Portal>
@@ -345,8 +281,7 @@ export default function DetallesCards({ x, closeModal }) {
     }
 
     if (Device.isDevice) {
-      const { status: existingStatus } =
-        await Notifications.getPermissionsAsync();
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
       let finalStatus = existingStatus;
       if (existingStatus !== "granted") {
         const { status } = await Notifications.requestPermissionsAsync();

@@ -1,18 +1,19 @@
-import { useState } from "react";
-import {
-  uploadPhotoForm,
-  uploadPhotoToCloudinary,
-} from "../redux/actions/photosActions";
+import { useEffect, useState } from "react";
+import { uploadPhotoForm, uploadPhotoToCloudinary, getAllChallenges } from "../redux/actions/photosActions";
 import { Button, TextInput, HelperText } from "react-native-paper";
 import { Image, ScrollView, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useLanguage } from "../hooks/useLanguage";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Picker } from "@react-native-picker/picker";
 
 export default function Publish() {
+  const dispatch = useDispatch();
   const langstring = useSelector((state) => state.lang.lang);
   const { publication } = useLanguage(langstring);
   const user = useSelector((state) => state.user.userData);
+  const [selectedReto, setSelectedReto] = useState(false);
+  const challenges = useSelector((state) => state.challenge.allChalenges.currents);
 
   const [formData, setFormData] = useState({
     title: { value: null },
@@ -25,21 +26,15 @@ export default function Publish() {
     uploading: false,
   });
 
-  const [statusCamera, requestPermissionCamera] =
-    ImagePicker.useCameraPermissions();
-  const [statusFiles, requestPermissionFiles] =
-    ImagePicker.useMediaLibraryPermissions();
+  useEffect(() => {
+    dispatch(getAllChallenges());
+  }, [dispatch]);
+
+  const [statusCamera, requestPermissionCamera] = ImagePicker.useCameraPermissions();
+  const [statusFiles, requestPermissionFiles] = ImagePicker.useMediaLibraryPermissions();
 
   function publishButton() {
-    if (
-      formData.title.value &&
-      formData.description.value &&
-      formData.tags.value &&
-      formData.ubication.value &&
-      formData.image.value &&
-      (formData.price.price || !formData.price.paga) &&
-      !formData.uploading
-    ) {
+    if (formData.title.value && formData.description.value && formData.tags.value && formData.ubication.value && formData.image.value && (formData.price.price || !formData.price.paga) && !formData.uploading) {
       return (
         <Button mode="contained" onPress={() => handleSubmit()}>
           {publication.btn}
@@ -55,7 +50,7 @@ export default function Publish() {
 
   async function handleSubmit() {
     setFormData({ ...formData, uploading: true });
-    const a = uploadPhotoForm({ ...formData, _id: user._id });
+    const a = uploadPhotoForm({ ...formData, _id: user._id, challenge: selectedReto });
     const d = await a();
     if (d.message === "Publicacion creada correctamente") {
       setFormData({
@@ -101,8 +96,7 @@ export default function Publish() {
   }
 
   async function handleTakeFile() {
-    const checkPermisions =
-      await ImagePicker.requestMediaLibraryPermissionsAsync(false);
+    const checkPermisions = await ImagePicker.requestMediaLibraryPermissionsAsync(false);
     await requestPermissionFiles();
     if (checkPermisions.granted) {
       const photo = await ImagePicker.launchImageLibraryAsync();
@@ -128,37 +122,19 @@ export default function Publish() {
         height: "100%",
       }}
     >
-      <TextInput
-        id="formulario_title"
-        placeholder={publication.title_placeholder}
-        onChangeText={(e) => handleTitle(e)}
-        value={formData.title.value || ""}
-      ></TextInput>
-      <TextInput
-        id="formulario_description"
-        placeholder={publication.descrip_placehodler}
-        onChangeText={(e) => handleDescription(e)}
-        value={formData.description.value || ""}
-      ></TextInput>
-      <TextInput
-        id="formulario_ubicacion"
-        placeholder={publication.ubication}
-        onChangeText={(e) => handleUbication(e)}
-        value={formData.ubication.value || ""}
-      ></TextInput>
-      <TextInput
-        id="formulario_tags"
-        placeholder={publication.tags}
-        onChangeText={(e) => handleTags(e)}
-        value={formData.tags.value || ""}
-      ></TextInput>
+      <TextInput id="formulario_title" placeholder={publication.title_placeholder} onChangeText={(e) => handleTitle(e)} value={formData.title.value || ""}></TextInput>
+      <TextInput id="formulario_description" placeholder={publication.descrip_placehodler} onChangeText={(e) => handleDescription(e)} value={formData.description.value || ""}></TextInput>
+      <TextInput id="formulario_ubicacion" placeholder={publication.ubication} onChangeText={(e) => handleUbication(e)} value={formData.ubication.value || ""}></TextInput>
+      <TextInput id="formulario_tags" placeholder={publication.tags} onChangeText={(e) => handleTags(e)} value={formData.tags.value || ""}></TextInput>
+      <Picker selectedValue={selectedReto} onValueChange={(itemValue) => setSelectedReto(itemValue)}>
+        <Picker.Item label={publication.reto} value={false} />
+        {challenges.map((x) => (
+          <Picker.Item label={x.title} value={x._id} key={x._id} />
+        ))}
+      </Picker>
 
       <View style={{ flexDirection: "row" }}>
-        <Button
-          mode="contained"
-          icon="camera"
-          onPress={() => handleTakePhoto()}
-        >
+        <Button mode="contained" icon="camera" onPress={() => handleTakePhoto()}>
           {publication.take_photo}
         </Button>
         <Button mode="contained" icon="file" onPress={() => handleTakeFile()}>
@@ -174,7 +150,7 @@ export default function Publish() {
             ? formData.image.value
             : "https://us.123rf.com/450wm/pavelstasevich/pavelstasevich1811/pavelstasevich181101028/112815904-no-image-available-icon-flat-vector-illustration.jpg?ver=6",
         }}
-        style={{ width: "100%", height: 300, alignSelf: "center" }}
+        style={{ width: "100%", height: 250, alignSelf: "center" }}
       ></Image>
       <Button
         mode="contained"
@@ -189,18 +165,8 @@ export default function Publish() {
       </Button>
       {formData.price.paga ? (
         <>
-          <TextInput
-            placeholder={publication.price}
-            type="number"
-            onChangeText={(e) => handlePrice(e)}
-            value={formData.price.price || ""}
-          ></TextInput>
-          <HelperText
-            type="error"
-            visible={
-              isNaN(formData.price.price) || parseInt(formData.price.price) < 0
-            }
-          >
+          <TextInput placeholder={publication.price} type="number" onChangeText={(e) => handlePrice(e)} value={formData.price.price || ""}></TextInput>
+          <HelperText type="error" visible={isNaN(formData.price.price) || parseInt(formData.price.price) < 0}>
             {publication.price_error}
           </HelperText>
         </>
