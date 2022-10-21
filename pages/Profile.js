@@ -20,7 +20,7 @@ export default function Profile() {
   const langstring = useSelector((state) => state.lang.lang);
   const { profile } = useLanguage(langstring);
   const dispatch = useDispatch();
-  const authorizationEndpoint = "https://frontendc7-darkroom.vercel.app/loginMobile";
+  const authorizationEndpoint = "https://darkroom-client.vercel.app/loginMobile";
   const useProxy = Platform.select({ web: false, default: true });
   const redirectUri = AuthSession.makeRedirectUri({ useProxy });
   WebBrowser.maybeCompleteAuthSession();

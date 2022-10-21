@@ -79,6 +79,7 @@ export default function Home({ navigation }) {
           width: "100%",
           alignContent: "center",
         }}
+        removeClippedSubviews={true}
         refreshControl={<RefreshControl refreshing={loading} onRefresh={() => handleRefresh()} />}
         onScroll={({ nativeEvent }) => {
           if (isCloseToBottom(nativeEvent)) {
